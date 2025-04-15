@@ -8,7 +8,7 @@ const chartsRouter = {
   redirect: 'noRedirect',
   name: 'Charts',
   meta: {
-    title: 'Charts',
+    title: '分析',
     icon: 'chart'
   },
   children: [
@@ -23,6 +23,12 @@ const chartsRouter = {
       component: () => import('@/views/charts/line'),
       name: 'LineChart',
       meta: { title: 'Line Chart', noCache: true }
+    },
+    {
+      path: 'baifen',
+      component: () => import('@/views/charts/baifen'),
+      name: 'baifenChart',
+      meta: { title: 'baifen Chart', noCache: true }
     },
     {
       path: 'mix-chart',
