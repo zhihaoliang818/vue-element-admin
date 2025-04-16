@@ -39,19 +39,32 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/404'),
     hidden: true
   },
-
+  // 主页管理
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        component: () => import('@/views/dashboard/index'),
+        name: 'Dashboard',
+        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+      }
+    ]
+  },
   /**
    * 根路由 - 首页
    * 注意：这里对应侧边栏的「首页」父级菜单
    */
   {
-    path: '/',
+    path: '/manger',
     component: Layout,
     meta: {
       title: '管理', // 修改此处将显示名称改为「管理」
       icon: 'table' // 侧边栏图标（Element UI图标名称）
     },
-    redirect: '/equipment-purchase', // 默认重定向到设备采购管理
+    redirect: 'noRedirect',
     children: [
       // 设备采购管理
       {
