@@ -66,33 +66,33 @@ export const constantRoutes = [
     },
     redirect: 'noRedirect',
     children: [
-      // 设备采购管理
+      // 境内订单管理
       {
-        path: 'equipment-purchase',
-        component: () => import('@/views/equipment/purchase'),
-        name: 'EquipmentPurchase',
+        path: 'domestic-orders',
+        component: () => import('@/views/order/domestic'),
+        name: 'DomesticOrders',
         meta: {
-          title: '设备采购管理',
+          title: '境内订单管理',
           icon: 'table'
         }
       },
-      // 设备维修管理
+      // 境外订单管理
       {
-        path: 'equipment-maintenance',
-        component: () => import('@/views/equipment/maintenance'),
-        name: 'EquipmentMaintenance',
+        path: 'international-orders',
+        component: () => import('@/views/order/international'),
+        name: 'InternationalOrders',
         meta: {
-          title: '设备维修管理',
+          title: '境外订单管理',
           icon: 'table'
         }
       },
-      // 设备报废管理
+      // 退改订单管理
       {
-        path: 'equipment-scrap',
-        component: () => import('@/views/equipment/scrap'),
-        name: 'EquipmentScrap',
+        path: 'order-amendments',
+        component: () => import('@/views/order/amendments'),
+        name: 'OrderAmendments',
         meta: {
-          title: '设备报废管理',
+          title: '退改订单管理',
           icon: 'table'
         }
       },
