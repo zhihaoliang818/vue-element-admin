@@ -10,6 +10,7 @@ const chartsRouter = {
   meta: {
     title: '分析',
     icon: 'chart'
+    // icon: 'el-icon-data-analysis' // 图标
   },
   children: [
     {

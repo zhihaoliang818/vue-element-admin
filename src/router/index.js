@@ -66,44 +66,36 @@ export const constantRoutes = [
     },
     redirect: 'noRedirect',
     children: [
-      // 境内订单管理
+      // 境内订单管理路由
       {
         path: 'domestic-orders',
         component: () => import('@/views/order/domestic'),
         name: 'DomesticOrders',
         meta: {
           title: '境内订单管理',
-          icon: 'table'
+          icon: 'el-icon-s-order'
         }
       },
-      // 境外订单管理
+
+      // 境外订单管理路由
       {
         path: 'international-orders',
         component: () => import('@/views/order/international'),
         name: 'InternationalOrders',
         meta: {
           title: '境外订单管理',
-          icon: 'table'
+          icon: 'el-icon-s-promotion'
         }
       },
-      // 退改订单管理
+
+      // 退改订单管理路由
       {
         path: 'order-amendments',
         component: () => import('@/views/order/amendments'),
         name: 'OrderAmendments',
         meta: {
           title: '退改订单管理',
-          icon: 'table'
-        }
-      },
-      // 数据分析
-      {
-        path: 'data-analysis',
-        component: () => import('@/views/data-analysis'),
-        name: 'DataAnalysis',
-        meta: {
-          title: '数据分析',
-          icon: 'chart' // 使用图表图标
+          icon: 'el-icon-refresh-left'
         }
       }
     ]

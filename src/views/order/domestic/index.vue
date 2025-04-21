@@ -35,60 +35,85 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Date" width="150px" align="center">
+      <el-table-column label="订单编号" prop="orderNumber" width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.orderNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Title" min-width="150px">
+      <el-table-column label="客户姓名" prop="customerName" width="120px" align="center">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-          <el-tag>{{ row.type | typeFilter }}</el-tag>
+          <span>{{ row.customerName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Author" width="110px" align="center">
+      <el-table-column label="省份" prop="province" width="100px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
+          <span>{{ row.province }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="showReviewer" label="Reviewer" width="110px" align="center">
+      <el-table-column label="市" prop="city" width="100px" align="center">
         <template slot-scope="{row}">
-          <span style="color:red;">{{ row.reviewer }}</span>
+          <span>{{ row.city }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Imp" width="80px">
+      <el-table-column label="性别" prop="gender" width="80px" align="center">
         <template slot-scope="{row}">
-          <svg-icon v-for="n in + row.importance" :key="n" icon-class="star" class="meta-item__icon" />
+          <el-tag :type="row.gender === '男' ? 'primary' : 'danger'">{{ row.gender }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Readings" align="center" width="95">
+      <el-table-column label="服务名称" prop="serviceName" width="150px" align="center">
         <template slot-scope="{row}">
-          <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
-          <span v-else>0</span>
+          <span>{{ row.serviceName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Status" class-name="status-col" width="100">
+      <el-table-column label="金额" prop="amount" width="120px" align="center">
         <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
-          </el-tag>
+          <span>¥{{ row.amount }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="下单时间" prop="orderTime" width="160px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.orderTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="游客人数" prop="visitorCount" width="100px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.visitorCount }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="游客姓名" prop="visitorNames" width="200px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.visitorNames.join(', ') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="支付时间" prop="paymentTime" width="160px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.paymentTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="审核人" prop="auditor" width="120px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.auditor }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="审核时间" prop="auditTime" width="160px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.auditTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="修改时间" prop="modifyTime" width="160px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.modifyTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             Edit
-          </el-button>
-          <el-button v-if="row.status!='published'" size="mini" type="success" @click="handleModifyStatus(row,'published')">
-            Publish
-          </el-button>
-          <el-button v-if="row.status!='draft'" size="mini" @click="handleModifyStatus(row,'draft')">
-            Draft
           </el-button>
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
             Delete
@@ -101,27 +126,79 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="Type" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+        <el-form-item label="客户姓名" prop="customerName">
+          <el-input v-model="temp.customerName" />
+        </el-form-item>
+        <el-form-item label="省份" prop="province">
+          <el-select v-model="temp.province" filterable placeholder="请选择省份" @change="temp.city = ''">
+            <el-option
+              v-for="province in provinceOptions"
+              :key="province"
+              :label="province"
+              :value="province"
+            />
           </el-select>
         </el-form-item>
-        <el-form-item label="Date" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
-        </el-form-item>
-        <el-form-item label="Title" prop="title">
-          <el-input v-model="temp.title" />
-        </el-form-item>
-        <el-form-item label="Status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
+        <el-form-item label="城市" prop="city">
+          <el-select v-model="temp.city" filterable :disabled="!temp.province" placeholder="请选择城市">
+            <el-option
+              v-for="city in cityOptions[temp.province] || []"
+              :key="city"
+              :label="city"
+              :value="city"
+            />
           </el-select>
         </el-form-item>
-        <el-form-item label="Imp">
-          <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3" style="margin-top:8px;" />
+        <el-form-item label="性别" prop="gender">
+          <el-select v-model="temp.gender" class="filter-item">
+            <el-option label="男" value="男" />
+            <el-option label="女" value="女" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="Remark">
-          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
+        <el-form-item label="服务项目" prop="serviceName">
+          <el-input v-model="temp.serviceName" />
+        </el-form-item>
+        <el-form-item label="金额" prop="amount">
+          <el-input v-model.number="temp.amount" type="number" />
+        </el-form-item>
+        <el-form-item label="下单时间" prop="orderTime">
+          <el-date-picker
+            v-model="temp.orderTime"
+            type="datetime"
+            placeholder="选择下单时间"
+            value-format="timestamp"
+          />
+        </el-form-item>
+        <el-form-item label="支付时间" prop="paymentTime">
+          <el-date-picker
+            v-model="temp.paymentTime"
+            type="datetime"
+            placeholder="选择支付时间"
+            value-format="timestamp"
+          />
+        </el-form-item>
+        <el-form-item label="游客信息">
+          <el-input-number
+            v-model="temp.visitorCount"
+            :min="1"
+            :max="10"
+            label="游客人数"
+          />
+          <el-select
+            v-model="temp.visitorNames"
+            multiple
+            filterable
+            allow-create
+            placeholder="请输入游客姓名"
+            style="margin-left: 10px; width: 300px;"
+          >
+            <el-option
+              v-for="name in temp.visitorNames"
+              :key="name"
+              :label="name"
+              :value="name"
+            />
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -147,7 +224,7 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/domestic'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -160,28 +237,16 @@ const calendarTypeOptions = [
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
+
+// const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
+//   acc[cur.key] = cur.display_name
+//   return acc
+// }, {})
 
 export default {
   name: 'ComplexTable',
   components: { Pagination },
   directives: { waves },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    },
-    typeFilter(type) {
-      return calendarTypeKeyValue[type]
-    }
-  },
   data() {
     return {
       tableKey: 0,
@@ -197,9 +262,16 @@ export default {
         sort: '+id'
       },
       importanceOptions: [1, 2, 3],
+      provinceOptions: ['北京市', '上海市', '江苏省', '浙江省', '广东省'],
+      cityOptions: {
+        '北京市': ['东城区', '西城区', '朝阳区', '海淀区'],
+        '上海市': ['黄浦区', '徐汇区', '长宁区', '静安区'],
+        '江苏省': ['南京市', '苏州市', '无锡市', '常州市'],
+        '浙江省': ['杭州市', '宁波市', '温州市', '绍兴市'],
+        '广东省': ['广州市', '深圳市', '珠海市', '东莞市']
+      },
       calendarTypeOptions,
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-      statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
         id: undefined,
@@ -219,9 +291,10 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
+        customerName: [{ required: true, message: '请输入客户姓名', trigger: 'blur' }],
+        serviceName: [{ required: true, message: '请选择服务项目', trigger: 'change' }],
+        amount: [{ required: true, message: '请输入金额', trigger: 'blur' }],
+        orderTime: [{ type: 'date', required: true, message: '请选择下单时间', trigger: 'change' }]
       },
       downloadLoading: false
     }
@@ -245,13 +318,6 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
-    },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
-      row.status = status
     },
     sortChange(data) {
       const { prop, order } = data
@@ -335,7 +401,7 @@ export default {
     handleDelete(row, index) {
       this.$notify({
         title: 'Success',
-        message: 'Delete Successfully',
+        message: '订单删除成功',
         type: 'success',
         duration: 2000
       })
