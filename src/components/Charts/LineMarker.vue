@@ -49,7 +49,7 @@ export default {
         backgroundColor: '#394056',
         title: {
           top: 20,
-          text: 'Requests',
+          text: '近2年境内、境外每月订单数占比',
           textStyle: {
             fontWeight: 'normal',
             fontSize: 16,
@@ -71,7 +71,7 @@ export default {
           itemWidth: 14,
           itemHeight: 5,
           itemGap: 13,
-          data: ['CMCC', 'CTCC', 'CUCC'],
+          data: ['2022年境内', '2022年境外', '2023年境内', '2023年境外'],
           right: '4%',
           textStyle: {
             fontSize: 12,
@@ -93,11 +93,11 @@ export default {
               color: '#57617B'
             }
           },
-          data: ['13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55']
+          data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
         }],
         yAxis: [{
           type: 'value',
-          name: '(%)',
+          name: '订单数占比(%)',
           axisTick: {
             show: false
           },
@@ -119,7 +119,7 @@ export default {
           }
         }],
         series: [{
-          name: 'CMCC',
+          name: '2022年境内',
           type: 'line',
           smooth: true,
           symbol: 'circle',
@@ -127,17 +127,18 @@ export default {
           showSymbol: false,
           lineStyle: {
             normal: {
-              width: 1
+              width: 1,
+              color: 'green'
             }
           },
           areaStyle: {
             normal: {
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                 offset: 0,
-                color: 'rgba(137, 189, 27, 0.3)'
+                color: 'rgba(0, 255, 0, 0.3)'
               }, {
                 offset: 0.8,
-                color: 'rgba(137, 189, 27, 0)'
+                color: 'rgba(0, 255, 0, 0)'
               }], false),
               shadowColor: 'rgba(0, 0, 0, 0.1)',
               shadowBlur: 10
@@ -145,15 +146,15 @@ export default {
           },
           itemStyle: {
             normal: {
-              color: 'rgb(137,189,27)',
-              borderColor: 'rgba(137,189,2,0.27)',
+              color: 'green',
+              borderColor: 'rgba(0,255,0,0.27)',
               borderWidth: 12
 
             }
           },
-          data: [220, 182, 191, 134, 150, 120, 110, 125, 145, 122, 165, 122]
+          data: [43, 47, 56, 60, 66, 45, 54, 77, 48, 76, 80, 67]
         }, {
-          name: 'CTCC',
+          name: '2022年境外',
           type: 'line',
           smooth: true,
           symbol: 'circle',
@@ -185,9 +186,9 @@ export default {
 
             }
           },
-          data: [120, 110, 125, 145, 122, 165, 122, 220, 182, 191, 134, 150]
+          data: [67, 63, 77, 73, 66, 68, 83, 74, 56, 52, 53, 60]
         }, {
-          name: 'CUCC',
+          name: '2023年境内',
           type: 'line',
           smooth: true,
           symbol: 'circle',
@@ -195,17 +196,18 @@ export default {
           showSymbol: false,
           lineStyle: {
             normal: {
-              width: 1
+              width: 1,
+              color: 'yellow'
             }
           },
           areaStyle: {
             normal: {
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                 offset: 0,
-                color: 'rgba(219, 50, 51, 0.3)'
+                color: 'rgba(255, 255, 0, 0.3)'
               }, {
                 offset: 0.8,
-                color: 'rgba(219, 50, 51, 0)'
+                color: 'rgba(255, 255, 0, 0)'
               }], false),
               shadowColor: 'rgba(0, 0, 0, 0.1)',
               shadowBlur: 10
@@ -213,12 +215,46 @@ export default {
           },
           itemStyle: {
             normal: {
-              color: 'rgb(219,50,51)',
-              borderColor: 'rgba(219,50,51,0.2)',
+              color: 'yellow',
+              borderColor: 'rgba(255,255,0,0.27)',
               borderWidth: 12
             }
           },
-          data: [220, 182, 125, 145, 122, 191, 134, 150, 120, 110, 165, 122]
+          data: [58, 77, 68, 60, 63, 68, 78, 80, 86, 70, 69, 59]
+        }, {
+          name: '2023年境外',
+          type: 'line',
+          smooth: true,
+          symbol: 'circle',
+          symbolSize: 5,
+          showSymbol: false,
+          lineStyle: {
+            normal: {
+              width: 1,
+              color: 'purple'
+            }
+          },
+          areaStyle: {
+            normal: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                offset: 0,
+                color: 'rgba(255, 0, 255, 0.3)'
+              }, {
+                offset: 0.8,
+                color: 'rgba(255, 0, 255, 0)'
+              }], false),
+              shadowColor: 'rgba(0, 0, 0, 0.1)',
+              shadowBlur: 10
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: 'purple',
+              borderColor: 'rgba(255,0,255,0.27)',
+              borderWidth: 12
+            }
+          },
+          data: [66, 63, 75, 72, 80, 82, 74, 62, 56, 71, 85, 88]
         }]
       })
     }
