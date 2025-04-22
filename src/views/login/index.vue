@@ -57,9 +57,9 @@
           <span>密码 : 任意</span>
         </div>
 
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
+        <!-- <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
           Or connect with
-        </el-button>
+        </el-button> -->
       </div>
     </el-form>
 
@@ -268,14 +268,18 @@ $light_gray:#eee;
   }
 
   .tips {
-    font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 5px;
 
     span {
-      &:first-of-type {
-        margin-right: 16px;
-      }
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      color: $dark_gray;
     }
   }
 
