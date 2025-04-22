@@ -6,10 +6,11 @@ export function fetchList(query) {
     method: 'get',
     params: {
       ...query,
-      orderNumber: query.orderNumber,
-      customerName: query.customerName,
-      serviceName: query.serviceName,
-      status: query.status
+      searchKey: query.searchKey,
+      searchValue: query.searchValue,
+      page: query.page,
+      limit: query.limit,
+      sort: query.sort
     }
   })
 }
