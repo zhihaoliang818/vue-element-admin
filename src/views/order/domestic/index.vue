@@ -208,14 +208,7 @@
             allow-create
             placeholder="请输入游客姓名"
             style="margin-left: 10px; width: 300px;"
-          >
-            <el-option
-              v-for="name in temp.visitorNames"
-              :key="name"
-              :label="name"
-              :value="name"
-            />
-          </el-select>
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -279,7 +272,15 @@ export default {
         customerName: [{ required: true, message: '请输入客户姓名', trigger: 'blur' }],
         serviceName: [{ required: true, message: '请选择服务项目', trigger: 'change' }],
         amount: [{ required: true, message: '请输入金额', trigger: 'blur' }],
-        orderTime: [{ type: 'date', required: true, message: '请选择下单时间', trigger: 'change' }]
+        orderTime: [{ type: 'date', required: true, message: '请选择下单时间', trigger: 'change' }],
+        visitorCount: [
+          { required: true, message: '请输入游客人数', trigger: 'blur' },
+          { type: 'number', min: 1, message: '至少1位游客' }
+        ],
+        visitorNames: [
+          { type: 'array', required: true, message: '请至少输入一个游客姓名', trigger: 'change' },
+          { validator: (rule, value, callback) => value.length > 0 ? callback() : callback(new Error('请至少输入一个游客姓名')) }
+        ]
       }
     }
   },
@@ -318,7 +319,8 @@ export default {
         remark: '',
         timestamp: new Date(),
         title: '',
-        status: 'published'
+        status: 'published',
+        visitorNames: []
       }
     },
     handleCreate() {
@@ -332,16 +334,21 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024
-          createOrder(this.temp).then(() => {
-            this.list.unshift(this.temp)
+          // 生成唯一ID
+          this.temp.id = Date.now().toString() + Math.random().toString(36).substr(2, 5)
+
+          // 处理空游客姓名的情况
+          if (this.temp.visitorNames.length === 0) {
+            this.temp.visitorNames.push('未命名游客')
+          }
+
+          createOrder({ ...this.temp }).then(() => {
+            this.list.unshift({ ...this.temp })
             this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: 'Created Successfully',
-              type: 'success',
-              duration: 2000
-            })
+            this.$message.success('创建成功')
+          }).catch(error => {
+            this.$message.error(`创建失败：${error.message}`)
+            console.error('API Error:', error)
           })
         }
       })
