@@ -46,7 +46,7 @@ export default {
       this.chart = echarts.init(document.getElementById(this.id))
 
       this.chart.setOption({
-        backgroundColor: '#394056',
+        backgroundColor: '#344b58',
         title: {
           top: 20,
           text: '近2年境内、境外每月订单数占比',
@@ -93,7 +93,7 @@ export default {
               color: '#57617B'
             }
           },
-          data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+          data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
         }],
         yAxis: [{
           type: 'value',
@@ -152,7 +152,7 @@ export default {
 
             }
           },
-          data: [43, 47, 56, 60, 66, 45, 54, 77, 48, 76, 80, 67]
+          data: [8, 9, 9, 8, 9, 7, 9, 9, 6, 9, 8, 9]
         }, {
           name: '2022年境外',
           type: 'line',
@@ -186,7 +186,7 @@ export default {
 
             }
           },
-          data: [67, 63, 77, 73, 66, 68, 83, 74, 56, 52, 53, 60]
+          data: [10, 9, 8, 8, 8, 9, 8, 8, 8, 8, 8, 8]
         }, {
           name: '2023年境内',
           type: 'line',
@@ -220,7 +220,7 @@ export default {
               borderWidth: 12
             }
           },
-          data: [58, 77, 68, 60, 63, 68, 78, 80, 86, 70, 69, 59]
+          data: [7, 8, 9, 9, 8, 10, 7, 7, 9, 9, 9, 8]
         }, {
           name: '2023年境外',
           type: 'line',
@@ -231,17 +231,17 @@ export default {
           lineStyle: {
             normal: {
               width: 1,
-              color: 'purple'
+              color: 'orange'
             }
           },
           areaStyle: {
             normal: {
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                 offset: 0,
-                color: 'rgba(255, 0, 255, 0.3)'
+                color: 'rgba(255,165,0, 0.3)'
               }, {
                 offset: 0.8,
-                color: 'rgba(255, 0, 255, 0)'
+                color: 'rgba(255,165,0, 0)'
               }], false),
               shadowColor: 'rgba(0, 0, 0, 0.1)',
               shadowBlur: 10
@@ -249,12 +249,12 @@ export default {
           },
           itemStyle: {
             normal: {
-              color: 'purple',
-              borderColor: 'rgba(255,0,255,0.27)',
+              color: 'orange',
+              borderColor: 'rgba(255,165,0,0.27)',
               borderWidth: 12
             }
           },
-          data: [66, 63, 75, 72, 80, 82, 74, 62, 56, 71, 85, 88]
+          data: [7, 9, 9, 9, 8, 7, 6, 8, 9, 10, 10, 8]
         }]
       })
     }
