@@ -54,7 +54,7 @@ export default {
       this.chart.setOption({
         backgroundColor: '#344b58',
         title: {
-          text: 'statistics',
+          text: '近2年每月订单数占比',
           x: '20',
           top: '20',
           textStyle: {
@@ -133,7 +133,8 @@ export default {
           },
           splitArea: {
             show: false
-          }
+          },
+          name: '订单数占比 (%)'
         }],
         dataZoom: [{
           show: true,
@@ -176,24 +177,24 @@ export default {
                 },
                 position: 'insideTop',
                 formatter(p) {
-                  return p.value > 0 ? p.value : ''
+                  return p.value > 0 ? p.value + '%' : ''
                 }
               }
             }
           },
           data: [
-            709,
-            1917,
-            2455,
-            2610,
-            1719,
-            1433,
-            1544,
-            3285,
-            5208,
-            3372,
-            2484,
-            4078
+            50,
+            60,
+            55,
+            50,
+            67,
+            75,
+            68,
+            60,
+            70,
+            78,
+            69,
+            65
           ]
         },
 
@@ -209,24 +210,24 @@ export default {
                 show: true,
                 position: 'insideTop',
                 formatter(p) {
-                  return p.value > 0 ? p.value : ''
+                  return p.value > 0 ? p.value + '%' : ''
                 }
               }
             }
           },
           data: [
-            327,
-            1776,
-            507,
-            1200,
-            800,
-            482,
-            204,
-            1390,
-            1001,
-            951,
-            381,
-            220
+            68,
+            77,
+            76,
+            65,
+            79,
+            82,
+            76,
+            63,
+            77,
+            68,
+            79,
+            88
           ]
         }
         ]
