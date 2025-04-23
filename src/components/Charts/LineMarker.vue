@@ -46,7 +46,7 @@ export default {
       this.chart = echarts.init(document.getElementById(this.id))
 
       this.chart.setOption({
-        backgroundColor: '#394056',
+        backgroundColor: '#344b58',
         title: {
           top: 20,
           text: '近2年境内、境外每月订单数占比',
@@ -93,7 +93,7 @@ export default {
               color: '#57617B'
             }
           },
-          data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+          data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
         }],
         yAxis: [{
           type: 'value',
@@ -231,17 +231,17 @@ export default {
           lineStyle: {
             normal: {
               width: 1,
-              color: 'purple'
+              color: 'orange'
             }
           },
           areaStyle: {
             normal: {
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                 offset: 0,
-                color: 'rgba(255, 0, 255, 0.3)'
+                color: 'rgba(255,165,0, 0.3)'
               }, {
                 offset: 0.8,
-                color: 'rgba(255, 0, 255, 0)'
+                color: 'rgba(255,165,0, 0)'
               }], false),
               shadowColor: 'rgba(0, 0, 0, 0.1)',
               shadowBlur: 10
@@ -249,8 +249,8 @@ export default {
           },
           itemStyle: {
             normal: {
-              color: 'purple',
-              borderColor: 'rgba(255,0,255,0.27)',
+              color: 'orange',
+              borderColor: 'rgba(255,165,0,0.27)',
               borderWidth: 12
             }
           },
