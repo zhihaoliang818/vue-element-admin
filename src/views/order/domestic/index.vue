@@ -1,15 +1,44 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
+      <!-- 搜索字段选择 + 搜索内容输入 -->
+      <el-select
+        v-model="listQuery.searchKey"
+        placeholder="搜索字段"
+        clearable
+        class="filter-item"
+        style="width: 130px"
+      >
+        <el-option label="订单编号" value="orderNumber" />
+        <el-option label="客户姓名" value="customerName" />
+        <el-option label="服务名称" value="serviceName" />
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        Search
+      <el-input
+        v-model="listQuery.searchValue"
+        placeholder="搜索内容"
+        class="filter-item"
+        style="width: 200px"
+        @keyup.enter.native="handleFilter"
+      />
+
+      <!-- 操作按钮 -->
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter"
+      >
+        搜索
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        Add
+      <el-button
+        class="filter-item"
+        style="margin-left: 10px;"
+        type="primary"
+        icon="el-icon-edit"
+        @click="handleCreate"
+      >
+        添加
       </el-button>
     </div>
 
@@ -220,11 +249,10 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        importance: undefined,
-        title: undefined,
+        searchKey: undefined, // 搜索字段：orderNumber/customerName/serviceName
+        searchValue: undefined, // 搜索内容
         sort: '+id'
       },
-      importanceOptions: [1, 2, 3],
       provinceOptions: ['北京市', '上海市', '江苏省', '浙江省', '广东省'],
       cityOptions: {
         '北京市': ['东城区', '西城区', '朝阳区', '海淀区'],
