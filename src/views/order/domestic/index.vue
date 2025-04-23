@@ -1,44 +1,58 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
-      <!-- 搜索字段选择 + 搜索内容输入 -->
+    <div class="filter-container" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 0 0; background: none; border-radius: 8px; margin-bottom: 10px;">
       <el-select
         v-model="listQuery.searchKey"
         placeholder="搜索字段"
         clearable
         class="filter-item"
-        style="width: 130px"
+        style="width: 160px; --el-border-color: #409eff;"
+        popper-class="custom-select"
       >
-        <el-option label="订单编号" value="orderNumber" />
-        <el-option label="客户姓名" value="customerName" />
-        <el-option label="服务名称" value="serviceName" />
+        <el-option
+          v-for="item in [
+            { label: '订单编号', value: 'orderNumber' },
+            { label: '客户姓名', value: 'customerName' },
+            { label: '服务名称', value: 'serviceName' }
+          ]"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
       </el-select>
+
       <el-input
         v-model="listQuery.searchValue"
-        placeholder="搜索内容"
+        placeholder="请输入搜索内容"
         class="filter-item"
-        style="width: 200px"
+        style="width: 280px; --el-input-border-color: #409eff; padding-left: 40px;"
+        clearable
         @keyup.enter.native="handleFilter"
-      />
+      >
+        <template #prefix>
+          <i class="el-icon-search" style="color: #909399; font-size: 16px; position: absolute; left: 45px; top: 50%; transform: translateY(-50%);" />
+        </template>
+      </el-input>
 
-      <!-- 操作按钮 -->
       <el-button
         v-waves
         class="filter-item"
         type="primary"
-        icon="el-icon-search"
+        style="height: 40px; border-radius: 6px; padding: 0 20px; background: linear-gradient(135deg, #409eff, #3375b9); border: none; box-shadow: 0 2px 6px rgba(64, 158, 255, 0.3);"
         @click="handleFilter"
       >
+        <i class="el-icon-search" style="margin-right: 6px;" />
         搜索
       </el-button>
+
       <el-button
         class="filter-item"
-        style="margin-left: 10px;"
-        type="primary"
-        icon="el-icon-edit"
+        type="success"
+        style="height: 40px; border-radius: 6px; padding: 0 20px; background: linear-gradient(135deg, #67c23a, #529b2e); border: none; box-shadow: 0 2px 6px rgba(103, 194, 58, 0.3);"
         @click="handleCreate"
       >
-        添加
+        <i class="el-icon-circle-plus" style="margin-right: 6px;" />
+        添加订单
       </el-button>
     </div>
 
@@ -127,13 +141,13 @@
           <span>{{ row.modifyTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            Edit
+            编辑
           </el-button>
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
-            Delete
+            删除
           </el-button>
         </template>
       </el-table-column>
@@ -320,7 +334,8 @@ export default {
         timestamp: new Date(),
         title: '',
         status: 'published',
-        visitorNames: []
+        visitorNames: [],
+        orderTime: Date.now() // 添加当前时间戳作为默认下单时间
       }
     },
     handleCreate() {
