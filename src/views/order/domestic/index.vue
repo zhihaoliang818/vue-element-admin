@@ -1,44 +1,58 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
-      <!-- 搜索字段选择 + 搜索内容输入 -->
+    <div class="filter-container" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 0 0; background: none; border-radius: 8px; margin-bottom: 10px;">
       <el-select
         v-model="listQuery.searchKey"
         placeholder="搜索字段"
         clearable
         class="filter-item"
-        style="width: 130px"
+        style="width: 160px; --el-border-color: #409eff;"
+        popper-class="custom-select"
       >
-        <el-option label="订单编号" value="orderNumber" />
-        <el-option label="客户姓名" value="customerName" />
-        <el-option label="服务名称" value="serviceName" />
+        <el-option
+          v-for="item in [
+            { label: '订单编号', value: 'orderNumber' },
+            { label: '客户姓名', value: 'customerName' },
+            { label: '服务名称', value: 'serviceName' }
+          ]"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
       </el-select>
+
       <el-input
         v-model="listQuery.searchValue"
-        placeholder="搜索内容"
+        placeholder="请输入搜索内容"
         class="filter-item"
-        style="width: 200px"
+        style="width: 280px; --el-input-border-color: #409eff; padding-left: 40px;"
+        clearable
         @keyup.enter.native="handleFilter"
-      />
+      >
+        <template #prefix>
+          <i class="el-icon-search" style="color: #909399; font-size: 16px; position: absolute; left: 45px; top: 50%; transform: translateY(-50%);" />
+        </template>
+      </el-input>
 
-      <!-- 操作按钮 -->
       <el-button
         v-waves
         class="filter-item"
         type="primary"
-        icon="el-icon-search"
+        style="height: 40px; border-radius: 6px; padding: 0 20px; background: linear-gradient(135deg, #409eff, #3375b9); border: none; box-shadow: 0 2px 6px rgba(64, 158, 255, 0.3);"
         @click="handleFilter"
       >
+        <i class="el-icon-search" style="margin-right: 6px;" />
         搜索
       </el-button>
+
       <el-button
         class="filter-item"
-        style="margin-left: 10px;"
-        type="primary"
-        icon="el-icon-edit"
+        type="success"
+        style="height: 40px; border-radius: 6px; padding: 0 20px; background: linear-gradient(135deg, #67c23a, #529b2e); border: none; box-shadow: 0 2px 6px rgba(103, 194, 58, 0.3);"
         @click="handleCreate"
       >
-        添加
+        <i class="el-icon-circle-plus" style="margin-right: 6px;" />
+        添加订单
       </el-button>
     </div>
 
@@ -127,13 +141,13 @@
           <span>{{ row.modifyTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            Edit
+            编辑
           </el-button>
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
-            Delete
+            删除
           </el-button>
         </template>
       </el-table-column>
@@ -208,14 +222,7 @@
             allow-create
             placeholder="请输入游客姓名"
             style="margin-left: 10px; width: 300px;"
-          >
-            <el-option
-              v-for="name in temp.visitorNames"
-              :key="name"
-              :label="name"
-              :value="name"
-            />
-          </el-select>
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -279,7 +286,15 @@ export default {
         customerName: [{ required: true, message: '请输入客户姓名', trigger: 'blur' }],
         serviceName: [{ required: true, message: '请选择服务项目', trigger: 'change' }],
         amount: [{ required: true, message: '请输入金额', trigger: 'blur' }],
-        orderTime: [{ type: 'date', required: true, message: '请选择下单时间', trigger: 'change' }]
+        orderTime: [{ type: 'date', required: true, message: '请选择下单时间', trigger: 'change' }],
+        visitorCount: [
+          { required: true, message: '请输入游客人数', trigger: 'blur' },
+          { type: 'number', min: 1, message: '至少1位游客' }
+        ],
+        visitorNames: [
+          { type: 'array', required: true, message: '请至少输入一个游客姓名', trigger: 'change' },
+          { validator: (rule, value, callback) => value.length > 0 ? callback() : callback(new Error('请至少输入一个游客姓名')) }
+        ]
       }
     }
   },
@@ -318,7 +333,10 @@ export default {
         remark: '',
         timestamp: new Date(),
         title: '',
-        status: 'published'
+        status: 'published',
+        visitorNames: [],
+        orderTime: Date.now(), // 添加当前时间戳作为
+        paymentTime: Date.now() // 新增支付时间默认值
       }
     },
     handleCreate() {
@@ -332,16 +350,21 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024
-          createOrder(this.temp).then(() => {
-            this.list.unshift(this.temp)
+          // 生成唯一ID
+          this.temp.id = Date.now().toString() + Math.random().toString(36).substr(2, 5)
+
+          // 处理空游客姓名的情况
+          if (this.temp.visitorNames.length === 0) {
+            this.temp.visitorNames.push('未命名游客')
+          }
+
+          createOrder({ ...this.temp }).then(() => {
+            this.list.unshift({ ...this.temp })
             this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: 'Created Successfully',
-              type: 'success',
-              duration: 2000
-            })
+            this.$message.success('创建成功')
+          }).catch(error => {
+            this.$message.error(`创建失败：${error.message}`)
+            console.error('API Error:', error)
           })
         }
       })

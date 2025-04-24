@@ -7,8 +7,9 @@ for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
     id: '@increment',
     orderNumber: Mock.Random.string('number', 12),
-    customerNameEn: Mock.Random.first() + ' ' + Mock.Random.last(),
-    country: Mock.Random.pick(['US', 'GB', 'JP', 'KR', 'FR']),
+    customerName: Mock.Random.cname(),
+    province: Mock.Random.province(),
+    city: Mock.Random.city(),
     gender: Mock.Random.pick(['男', '女']),
     serviceName: Mock.Random.ctitle(5, 8) + '服务套餐',
     amount: Mock.Random.float(1000, 50000, 2, 2),
@@ -25,7 +26,7 @@ for (let i = 0; i < count; i++) {
 
 module.exports = [
   {
-    url: '/vue-element-admin/international/list',
+    url: '/vue-element-admin/amendments/list',
     type: 'get',
     response: config => {
       const { searchKey, searchValue, page = 1, limit = 20, sort } = config.query
@@ -54,7 +55,7 @@ module.exports = [
   },
 
   {
-    url: '/vue-element-admin/international/detail',
+    url: '/vue-element-admin/amendments/detail',
     type: 'get',
     response: config => {
       const { id } = config.query
@@ -70,7 +71,7 @@ module.exports = [
   },
 
   {
-    url: '/vue-element-admin/international/pv',
+    url: '/vue-element-admin/amendments/pv',
     type: 'get',
     response: _ => {
       return {
@@ -88,7 +89,7 @@ module.exports = [
   },
 
   {
-    url: '/vue-element-admin/international/create',
+    url: '/vue-element-admin/amendments/create',
     type: 'post',
     response: _ => {
       return {
@@ -99,7 +100,7 @@ module.exports = [
   },
 
   {
-    url: '/vue-element-admin/international/update',
+    url: '/vue-element-admin/amendments/update',
     type: 'post',
     response: _ => {
       return {
