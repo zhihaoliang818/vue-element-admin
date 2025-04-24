@@ -4,6 +4,10 @@
 
       <div class="title-container">
         <h3 class="title">游艇旅游订单管理系统</h3>
+        <div class="action-links">
+          <el-link type="primary" @click="resetPasswordDialogVisible = true">忘记密码？</el-link>
+          <el-link type="success" style="margin-left: 15px;" @click="registerDialogVisible = true">用户注册</el-link>
+        </div>
       </div>
 
       <el-form-item prop="username">
@@ -57,11 +61,12 @@
           <span>密码 : 任意</span>
         </div>
 
-        <!-- <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          Or connect with
-        </el-button> -->
       </div>
     </el-form>
+
+    <div class="version-info">
+      游艇旅游订单管理系统v1.0
+    </div>
 
     <el-dialog title="Or connect with" :visible.sync="showDialog">
       Can not be simulated on local, so please combine you own business simulation! ! !
@@ -70,44 +75,249 @@
       <br>
       <social-sign />
     </el-dialog>
+
+    <el-dialog
+      title="重置密码"
+      :visible.sync="resetPasswordDialogVisible"
+      width="500px"
+      custom-class="custom-dialog"
+      center
+      :close-on-click-modal="false"
+      append-to-body
+    >
+      <div class="dialog-header-icon">
+        <i class="el-icon-lock icon-large" />
+      </div>
+      <el-form ref="resetForm" :model="resetForm" :rules="resetRules" label-width="90px" label-position="right" class="dialog-form">
+
+        <el-form-item label="账号" prop="account">
+          <el-input
+            v-model="resetForm.account"
+            placeholder="请输入账号"
+            prefix-icon="el-icon-user"
+            clearable
+          />
+        </el-form-item>
+
+        <el-form-item label="注册邮箱" prop="email">
+          <el-input
+            v-model="resetForm.email"
+            placeholder="请输入注册时使用的邮箱"
+            prefix-icon="el-icon-message"
+            clearable
+          />
+        </el-form-item>
+
+        <el-form-item label="新密码" prop="password">
+          <el-input
+            v-model="resetForm.password"
+            type="password"
+            placeholder="请输入新密码（至少6位）"
+            prefix-icon="el-icon-lock"
+            show-password
+            clearable
+          />
+        </el-form-item>
+
+        <el-form-item label="确认密码" prop="confirmPassword">
+          <el-input
+            v-model="resetForm.confirmPassword"
+            type="password"
+            placeholder="请再次输入新密码"
+            prefix-icon="el-icon-refresh-left"
+            show-password
+            clearable
+          />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="resetPasswordDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleResetPassword">确 定 重 置</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      title="用户注册"
+      :visible.sync="registerDialogVisible"
+      width="500px"
+      custom-class="custom-dialog"
+      center
+      :close-on-click-modal="false"
+      append-to-body
+    >
+      <div class="dialog-header-icon">
+        <i class="el-icon-user-solid icon-large" />
+      </div>
+      <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="90px" label-position="right" class="dialog-form">
+
+        <el-form-item label="账号" prop="account">
+          <el-input
+            v-model="registerForm.account"
+            placeholder="请输入登录账号"
+            prefix-icon="el-icon-user"
+            clearable
+          />
+        </el-form-item>
+
+        <el-form-item label="邮箱" prop="email">
+          <el-input
+            v-model="registerForm.email"
+            placeholder="请输入邮箱地址"
+            prefix-icon="el-icon-message"
+            clearable
+          />
+        </el-form-item>
+
+        <el-form-item label="设置密码" prop="password">
+          <el-input
+            v-model="registerForm.password"
+            type="password"
+            placeholder="请输入密码（至少6位）"
+            prefix-icon="el-icon-lock"
+            show-password
+            clearable
+          />
+        </el-form-item>
+
+        <el-form-item label="确认密码" prop="confirmPassword">
+          <el-input
+            v-model="registerForm.confirmPassword"
+            type="password"
+            placeholder="请再次输入密码"
+            prefix-icon="el-icon-refresh-left"
+            show-password
+            clearable
+          />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="registerDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleRegister">注 册</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import { validUsername } from '@/utils/validate' // Assuming you have this validation util
 import SocialSign from './components/SocialSignin'
 
 export default {
   name: 'Login',
   components: { SocialSign },
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
+    // --- Validation Functions ---
+    const validateUsernameInput = (rule, value, callback) => {
+      // Replace with your actual username validation logic if different from validUsername
+      if (!value || value.trim().length === 0) {
+        callback(new Error('请输入用户名'))
+      } else if (!validUsername(value)) { // Keep using validUsername if it suits your needs
+        callback(new Error('请输入正确的用户名格式')) // Or a more specific error
       } else {
         callback()
       }
     }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
+
+    const validatePasswordInput = (rule, value, callback) => {
+      if (!value || value.length < 6) {
         callback(new Error('密码不能少于6位'))
       } else {
         callback()
       }
     }
+
+    const validateAccountInput = (rule, value, callback) => {
+      if (!value || value.trim().length === 0) {
+        callback(new Error('请输入账号'))
+      } else {
+        // Add more specific account validation if needed (e.g., length, characters)
+        callback()
+      }
+    }
+
+    const validateEmailInput = (rule, value, callback) => {
+      if (!value || value.trim().length === 0) {
+        callback(new Error('请输入邮箱地址'))
+      } else {
+        // Basic email format check
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(value)) {
+          callback(new Error('请输入正确的邮箱地址'))
+        } else {
+          callback()
+        }
+      }
+    }
+
+    // Validator for Reset Password Confirmation
+    const validateResetConfirmPassword = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请再次输入新密码'))
+      } else if (value !== this.resetForm.password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
+
+    // Validator for Register Password Confirmation
+    const validateRegisterConfirmPassword = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.registerForm.password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
+    // --- End Validation Functions ---
+
     return {
       loginForm: {
         username: 'admin',
-        password: '111111'
+        password: '111' // Shorter password for testing validation
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        // Use the specific validator function
+        username: [{ required: true, trigger: 'blur', validator: validateUsernameInput }],
+        password: [{ required: true, trigger: 'blur', validator: validatePasswordInput }]
       },
       passwordType: 'password',
       capsTooltip: false,
       loading: false,
-      showDialog: false,
+      showDialog: false, // For Social Signin Dialog
+
+      // Reset Password State
+      resetPasswordDialogVisible: false,
+      resetForm: {
+        account: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      },
+      resetRules: {
+        account: [{ required: true, validator: validateAccountInput, trigger: 'blur' }],
+        email: [{ required: true, validator: validateEmailInput, trigger: ['blur', 'change'] }],
+        password: [{ required: true, validator: validatePasswordInput, trigger: 'blur' }],
+        confirmPassword: [{ required: true, validator: validateResetConfirmPassword, trigger: 'blur' }]
+      },
+
+      // Register State
+      registerDialogVisible: false,
+      registerForm: {
+        account: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      },
+      registerRules: {
+        account: [{ required: true, validator: validateAccountInput, trigger: 'blur' }],
+        email: [{ required: true, validator: validateEmailInput, trigger: ['blur', 'change'] }],
+        password: [{ required: true, validator: validatePasswordInput, trigger: 'blur' }],
+        confirmPassword: [{ required: true, validator: validateRegisterConfirmPassword, trigger: 'blur' }]
+      },
+
       redirect: undefined,
       otherQuery: {}
     }
@@ -122,12 +332,30 @@ export default {
         }
       },
       immediate: true
+    },
+    // Reset dialog visibility to clear form when opened (optional)
+    resetPasswordDialogVisible(newValue) {
+      if (newValue) {
+        this.$nextTick(() => {
+          this.$refs.resetForm?.resetFields() // Use optional chaining
+          // Or manually clear: this.resetForm = { account: '', email: '', password: '', confirmPassword: '' };
+        })
+      }
+    },
+    registerDialogVisible(newValue) {
+      if (newValue) {
+        this.$nextTick(() => {
+           this.$refs.registerForm?.resetFields() // Use optional chaining
+          // Or manually clear: this.registerForm = { account: '', email: '', password: '', confirmPassword: '' };
+        })
+      }
     }
   },
   created() {
     // window.addEventListener('storage', this.afterQRScan)
   },
   mounted() {
+    // Focus logic remains the same
     if (this.loginForm.username === '') {
       this.$refs.username.focus()
     } else if (this.loginForm.password === '') {
@@ -143,11 +371,7 @@ export default {
       this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
     },
     showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
-      }
+      this.passwordType = this.passwordType === 'password' ? '' : 'password'
       this.$nextTick(() => {
         this.$refs.password.focus()
       })
@@ -156,20 +380,85 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+          // --- Replace with your actual login API call ---
+          console.log('Attempting login with:', this.loginForm)
+          // Mock API call
+          setTimeout(() => {
+            // Simulate success or failure based on input (e.g., admin/any password)
+            const loginSuccess = (this.loginForm.username === 'admin' || this.loginForm.username === 'editor')
+
+            if (loginSuccess) {
+              // Mock successful login using vuex (if you have it setup)
+              // Example: this.$store.dispatch('user/login', this.loginForm)
+              console.log('Dispatching login action...')
+              this.$store.dispatch('user/login', this.loginForm)
+                .then(() => {
+                  console.log('Login success, redirecting...')
+                  this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+                  this.loading = false
+                })
+                .catch((error) => {
+                  console.error('Login action failed:', error)
+                  this.$message.error('登录失败，请稍后重试')
+                  this.loading = false
+                })
+            } else {
+              console.log('Login failed: Invalid credentials')
+              this.$message.error('用户名或密码错误')
               this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
+            }
+          }, 1000) // Simulate network delay
+          // --- End of mock/actual API call ---
         } else {
-          console.log('error submit!!')
+          console.log('Login form validation failed!')
           return false
         }
       })
     },
+
+    // Method to handle Reset Password submission
+    handleResetPassword() {
+      this.$refs.resetForm.validate(valid => {
+        if (valid) {
+          console.log('Reset Password Form Data:', this.resetForm)
+          // --- Frontend Only Logic ---
+          // Here you would typically call an API to send a reset link/code
+          // For now, just show a success message
+          this.$message.success('密码重置请求已模拟提交 (前端)，请检查控制台输出')
+          // Optionally send email via a backend service if needed in future
+          // e.g., axios.post('/api/password/reset-request', this.resetForm)...
+          this.resetPasswordDialogVisible = false // Close dialog on success
+          // --- End Frontend Only Logic ---
+        } else {
+          console.log('Reset password form validation failed!')
+          this.$message.error('请检查输入项是否正确')
+          return false
+        }
+      })
+    },
+
+    // Method to handle Registration submission
+    handleRegister() {
+      this.$refs.registerForm.validate(valid => {
+        if (valid) {
+          console.log('Registration Form Data:', this.registerForm)
+          // --- Frontend Only Logic ---
+          // Here you would typically call an API to register the user
+          // For now, just show a success message
+          this.$message.success('注册成功 (前端模拟)，请检查控制台输出')
+          // Optionally call backend API:
+          // e.g., axios.post('/api/register', this.registerForm)...
+          this.registerDialogVisible = false // Close dialog on success
+          // --- End Frontend Only Logic ---
+        } else {
+          console.log('Registration form validation failed!')
+          this.$message.error('请检查输入项是否正确')
+          return false
+        }
+      })
+    },
+
+    // Utility method from original code
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
         if (cur !== 'redirect') {
@@ -178,32 +467,56 @@ export default {
         return acc
       }, {})
     }
-    // afterQRScan() {
-    //   if (e.key === 'x-admin-oauth-code') {
-    //     const code = getQueryObject(e.newValue)
-    //     const codeMap = {
-    //       wechat: 'code',
-    //       tencent: 'code'
-    //     }
-    //     const type = codeMap[this.auth_type]
-    //     const codeName = code[type]
-    //     if (codeName) {
-    //       this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-    //         this.$router.push({ path: this.redirect || '/' })
-    //       })
-    //     } else {
-    //       alert('第三方登录失败')
-    //     }
-    //   }
-    // }
+    // afterQRScan() { ... } // Keep if needed
   }
 }
 </script>
 
 <style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
+/* Shared styles for dialogs (can be unscoped or scoped if preferred) */
+.custom-dialog {
+  .el-dialog__header {
+    // background-color: #f8f8f8;
+    border-bottom: 1px solid #eee;
+    padding: 15px 20px;
+     .el-dialog__title {
+        font-weight: bold;
+        font-size: 18px;
+     }
+  }
+  .el-dialog__body {
+    padding: 20px 30px 10px 30px; // Adjust padding
+  }
+   .el-dialog__footer {
+     border-top: 1px solid #eee;
+     padding: 15px 20px;
+     text-align: right; // Ensure buttons are on the right
+   }
 
+  .dialog-header-icon {
+      text-align: center;
+      margin-bottom: 20px; // Space below icon
+      .icon-large {
+        font-size: 3em; // Make icon bigger
+        color: #409EFF; // Use Element UI primary color or custom
+      }
+  }
+
+  .dialog-form {
+    .el-form-item {
+      margin-bottom: 22px; // Standard spacing
+    }
+    .el-input {
+        width: 100%; // Make inputs fill the space
+    }
+    .el-form-item__label {
+        font-weight: 500; // Slightly bolder labels
+    }
+  }
+}
+
+/* Original unscoped styles (keep as they are) */
+/* Fix input background and cursor color issues */
 $bg:#283443;
 $light_gray:#fff;
 $cursor: #fff;
@@ -214,7 +527,7 @@ $cursor: #fff;
   }
 }
 
-/* reset element-ui css */
+/* Reset element-ui css for login form */
 .login-container {
   .el-input {
     display: inline-block;
@@ -248,21 +561,33 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
+// Original scoped styles (keep most, adjust where needed)
+.version-info {
+  position: fixed; // Keep it fixed at the bottom
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255,0.25); // Slightly more visible
+  letter-spacing: 0.5px;
+}
+
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
 
 .login-container {
-  min-height: 100%;
+  min-height: 100vh; // Use vh for full height
   width: 100%;
   background-color: $bg;
-  overflow: hidden;
+  overflow: hidden; // Prevent scrollbars on the container itself
 
   .login-form {
     position: relative;
     width: 520px;
-    max-width: 100%;
-    padding: 160px 35px 0;
+    max-width: 95%; // Better responsiveness on small screens
+    padding: 120px 35px 0; // Reduced top padding slightly
     margin: 0 auto;
     overflow: hidden;
   }
@@ -271,13 +596,13 @@ $light_gray:#eee;
     display: flex;
     justify-content: center;
     gap: 14px;
-    margin-bottom: 20px;
-    padding: 12px;
+    margin-bottom: 15px; // Reduced margin
+    padding: 10px;       // Reduced padding
     background: rgba(255, 255, 255, 0.08);
     border-radius: 5px;
 
     span {
-      font-size: 15px;
+      font-size: 14px; // Slightly smaller
       letter-spacing: 0.5px;
       color: $dark_gray;
     }
@@ -293,13 +618,22 @@ $light_gray:#eee;
 
   .title-container {
     position: relative;
+    margin-bottom: 30px; // Add space below title/links
 
     .title {
       font-size: 26px;
       color: $light_gray;
-      margin: 0px auto 40px auto;
+      margin: 0px auto 20px auto; // Space below title
       text-align: center;
       font-weight: bold;
+    }
+    // Style for the links container
+    .action-links {
+       text-align: center; // Center the links below the title
+       margin-top: 5px;
+       .el-link {
+         font-size: 14px; // Standard link size
+       }
     }
   }
 
@@ -313,16 +647,13 @@ $light_gray:#eee;
     user-select: none;
   }
 
-  .thirdparty-button {
-    position: absolute;
-    right: 0;
-    bottom: 6px;
-  }
-
-  @media only screen and (max-width: 470px) {
-    .thirdparty-button {
-      display: none;
-    }
-  }
+  // Removed thirdparty button styles as it's commented out
+  // @media only screen and (max-width: 470px) { ... }
 }
+
+// Style overrides for dialogs within the scoped context if needed
+// Example:
+// ::v-deep .custom-dialog .el-dialog__title {
+//    color: red; // Use ::v-deep or /deep/ or >>> for scoped styles affecting child components
+// }
 </style>

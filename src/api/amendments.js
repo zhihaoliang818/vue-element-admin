@@ -21,9 +21,9 @@ export function createOrder(data) {
     method: 'post',
     data: {
       ...data,
-      visitorNames: data.visitorNames.join(','),
-      orderTime: +new Date(data.orderTime),
-      paymentTime: +new Date(data.paymentTime)
+      auditor: data.auditor,
+      auditTime: +new Date(data.auditTime),
+      updateTime: +new Date()
     }
   })
 }
@@ -34,10 +34,9 @@ export function updateOrder(data) {
     method: 'post',
     data: {
       ...data,
-      visitorNames: data.visitorNames.join(','),
-      orderTime: +new Date(data.orderTime),
-      paymentTime: +new Date(data.paymentTime),
-      modifyTime: +new Date()
+      auditor: data.auditor,
+      auditTime: +new Date(data.auditTime),
+      updateTime: +new Date()
     }
   })
 }

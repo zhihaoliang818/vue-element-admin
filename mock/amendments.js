@@ -8,19 +8,19 @@ for (let i = 0; i < count; i++) {
     id: '@increment',
     orderNumber: Mock.Random.string('number', 12),
     customerName: Mock.Random.cname(),
-    province: Mock.Random.province(),
-    city: Mock.Random.city(),
-    gender: Mock.Random.pick(['男', '女']),
+    amendOrderNo: 'TG' + Mock.Random.string('number', 8),
+    originalOrderNo: 'YD' + Mock.Random.string('number', 8),
     serviceName: Mock.Random.ctitle(5, 8) + '服务套餐',
     amount: Mock.Random.float(1000, 50000, 2, 2),
     orderTime: +Mock.Random.date('T'),
-    visitorCount: Mock.Random.integer(1, 10),
-    visitorNames: Array.from({length: Mock.Random.integer(1, 5)}, () => Mock.Random.cname()),
-    paymentTime: +Mock.Random.date('T'),
+    refundAmount: Mock.Random.float(500, 50000, 2, 2),
+    refundStatus: Mock.Random.pick(['待审核', '已通过', '已拒绝']),
+    auditTime: +Mock.Random.date('T'),
+    updateTime: +Mock.Random.date('T'),
     auditor: Mock.Random.cname(),
     auditTime: +Mock.Random.date('T'),
     modifyTime: +Mock.Random.date('T'),
-    status: Mock.Random.pick(['已审核', '待审核', '已修改'])
+    status: Mock.Random.pick(['已处理', '待处理'])
   }))
 }
 
