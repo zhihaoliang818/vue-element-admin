@@ -12,7 +12,7 @@
         <el-option
           v-for="item in [
             { label: '订单编号', value: 'orderNumber' },
-            { label: '客户姓名', value: 'customerName' },
+            { label: '客户姓名(英文)', value: 'customerNameEn' },
             { label: '服务名称', value: 'serviceName' }
           ]"
           :key="item.value"
@@ -155,23 +155,13 @@
         <el-form-item label="客户姓名" prop="customerName">
           <el-input v-model="temp.customerName" />
         </el-form-item>
-        <el-form-item label="省份" prop="province">
-          <el-select v-model="temp.province" filterable placeholder="请选择省份" @change="temp.city = ''">
+        <el-form-item label="国别" prop="country">
+          <el-select v-model="temp.country" filterable placeholder="请选择国家">
             <el-option
-              v-for="province in provinceOptions"
-              :key="province"
-              :label="province"
-              :value="province"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="城市" prop="city">
-          <el-select v-model="temp.city" filterable :disabled="!temp.province" placeholder="请选择城市">
-            <el-option
-              v-for="city in cityOptions[temp.province] || []"
-              :key="city"
-              :label="city"
-              :value="city"
+              v-for="country in countryOptions"
+              :key="country.code"
+              :label="country.name"
+              :value="country.code"
             />
           </el-select>
         </el-form-item>
@@ -255,14 +245,13 @@ export default {
         searchValue: undefined, // 搜索内容
         sort: '+id'
       },
-      provinceOptions: ['北京市', '上海市', '江苏省', '浙江省', '广东省'],
-      cityOptions: {
-        '北京市': ['东城区', '西城区', '朝阳区', '海淀区'],
-        '上海市': ['黄浦区', '徐汇区', '长宁区', '静安区'],
-        '江苏省': ['南京市', '苏州市', '无锡市', '常州市'],
-        '浙江省': ['杭州市', '宁波市', '温州市', '绍兴市'],
-        '广东省': ['广州市', '深圳市', '珠海市', '东莞市']
-      },
+      countryOptions: [
+        { code: 'US', name: '美国' },
+        { code: 'GB', name: '英国' },
+        { code: 'JP', name: '日本' },
+        { code: 'KR', name: '韩国' },
+        { code: 'FR', name: '法国' }
+      ],
       temp: {
         id: undefined,
         importance: 1,

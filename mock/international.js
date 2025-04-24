@@ -7,9 +7,8 @@ for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
     id: '@increment',
     orderNumber: Mock.Random.string('number', 12),
-    customerName: Mock.Random.cname(),
-    province: Mock.Random.province(),
-    city: Mock.Random.city(),
+    customerNameEn: Mock.Random.first() + ' ' + Mock.Random.last(),
+    country: Mock.Random.pick(['US', 'GB', 'JP', 'KR', 'FR']),
     gender: Mock.Random.pick(['男', '女']),
     serviceName: Mock.Random.ctitle(5, 8) + '服务套餐',
     amount: Mock.Random.float(1000, 50000, 2, 2),

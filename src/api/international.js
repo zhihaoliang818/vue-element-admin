@@ -10,7 +10,9 @@ export function fetchList(query) {
       searchValue: query.searchValue,
       page: query.page,
       limit: query.limit,
-      sort: query.sort
+      sort: query.sort,
+      country: query.country,
+      customerNameEn: query.customerNameEn
     }
   })
 }

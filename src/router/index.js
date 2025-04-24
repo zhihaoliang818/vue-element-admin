@@ -108,6 +108,20 @@ export const constantRoutes = [
 export const asyncRoutes = [
   // 图表模块（从单独模块文件引入）
   chartsRouter,
+  {
+    path: '/log',
+    component: Layout,
+    redirect: '/log/list',
+    meta: { title: '日志管理', icon: 'el-icon-notebook-2' },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/log-table/index'),
+        name: 'LogList',
+        meta: { title: '日志列表', icon: 'el-icon-tickets' }
+      }
+    ]
+  },
 
   // 404页面必须放在最后
   { path: '*', redirect: '/404', hidden: true }

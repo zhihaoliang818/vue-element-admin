@@ -81,14 +81,14 @@
           <span>{{ row.customerName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="省份" prop="province" width="100px" align="center">
+      <el-table-column label="退改单号" prop="amendOrderNo" width="180px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.province }}</span>
+          <span>{{ row.amendOrderNo }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="市" prop="city" width="100px" align="center">
+      <el-table-column label="原订单号" prop="originalOrderNo" width="180px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.city }}</span>
+          <span>{{ row.originalOrderNo }}</span>
         </template>
       </el-table-column>
       <el-table-column label="性别" prop="gender" width="80px" align="center">
