@@ -26,7 +26,7 @@ for (let i = 0; i < count; i++) {
 
 module.exports = [
   {
-    url: '/vue-element-admin/international/list',
+    url: '/vue-element-admin/amendments/list',
     type: 'get',
     response: config => {
       const { searchKey, searchValue, page = 1, limit = 20, sort } = config.query
@@ -55,7 +55,7 @@ module.exports = [
   },
 
   {
-    url: '/vue-element-admin/international/detail',
+    url: '/vue-element-admin/amendments/detail',
     type: 'get',
     response: config => {
       const { id } = config.query
@@ -71,7 +71,7 @@ module.exports = [
   },
 
   {
-    url: '/vue-element-admin/international/pv',
+    url: '/vue-element-admin/amendments/pv',
     type: 'get',
     response: _ => {
       return {
@@ -89,7 +89,7 @@ module.exports = [
   },
 
   {
-    url: '/vue-element-admin/international/create',
+    url: '/vue-element-admin/amendments/create',
     type: 'post',
     response: _ => {
       return {
@@ -100,7 +100,7 @@ module.exports = [
   },
 
   {
-    url: '/vue-element-admin/international/update',
+    url: '/vue-element-admin/amendments/update',
     type: 'post',
     response: _ => {
       return {

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/vue-element-admin/international/list',
+    url: '/vue-element-admin/amendments/list',
     method: 'get',
     params: {
       ...query,
@@ -17,7 +17,7 @@ export function fetchList(query) {
 
 export function createOrder(data) {
   return request({
-    url: '/vue-element-admin/international/create',
+    url: '/vue-element-admin/amendments/create',
     method: 'post',
     data: {
       ...data,
@@ -30,7 +30,7 @@ export function createOrder(data) {
 
 export function updateOrder(data) {
   return request({
-    url: '/vue-element-admin/international/update',
+    url: '/vue-element-admin/amendments/update',
     method: 'post',
     data: {
       ...data,

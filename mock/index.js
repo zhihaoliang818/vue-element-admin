@@ -5,14 +5,19 @@ const user = require('./user')
 const role = require('./role')
 const article = require('./article')
 const search = require('./remote-search')
-const international = require('./domestic')
+const domestic = require('./domestic')
+const international = require('./international')
+const amendments = require('./amendments')
+
 
 const mocks = [
   ...user,
   ...role,
   ...article,
   ...search,
-  ...international
+  ...domestic,
+  ...international,
+  ...amendments
 ]
 
 // for front mock
