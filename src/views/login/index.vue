@@ -4,7 +4,6 @@
 
       <div class="title-container">
         <h3 class="title">游艇旅游订单管理系统</h3>
-
       </div>
 
       <el-form-item prop="username">
@@ -64,16 +63,11 @@
           登 录
         </el-button>
       </div>
-      <div class="action-links" style="margin: 10px 0;">
-        <el-link
-          type="primary"
-          style="display: inline-block; margin: 0 auto;"
-          @click="handlePasswordResetClick"
-        >
-          忘记密码？
-        </el-link>
+      <div class="forget" style="text-align: center;">
+        <el-link type="primary" style="opacity: 0.8;" @click="resetPasswordDialogVisible = true">忘记密码？</el-link>
       </div>
     </el-form>
+
     <div class="version-info">
       游艇旅游订单管理系统v1.0
     </div>
@@ -455,7 +449,7 @@ export default {
           // --- Frontend Only Logic ---
           // Here you would typically call an API to register the user
           // For now, just show a success message
-          this.$message.success('注册成功 (前端模拟)，请检查控制台输出')
+          this.$message.success('注册成功')
           // Optionally call backend API:
           // e.g., axios.post('/api/register', this.registerForm)...
           this.registerDialogVisible = false // Close dialog on success
@@ -644,14 +638,6 @@ $light_gray:#eee;
       margin: 0px auto 20px auto; // Space below title
       text-align: center;
       font-weight: bold;
-    }
-    // Style for the links container
-    .action-links {
-       text-align: center; // Center the links below the title
-       margin-top: 5px;
-       .el-link {
-         font-size: 14px; // Standard link size
-       }
     }
   }
 
