@@ -4,6 +4,9 @@
 
       <div class="title-container">
         <h3 class="title">游艇旅游订单管理系统</h3>
+        <div class="forgot-password">
+          <el-link type="primary" @click="resetPasswordDialogVisible = true">忘记密码？</el-link>
+        </div>
       </div>
 
       <el-form-item prop="username">
@@ -70,6 +73,27 @@
       <br>
       <social-sign />
     </el-dialog>
+
+    <el-dialog title="重置密码" :visible.sync="resetPasswordDialogVisible" width="500px">
+      <el-form ref="resetForm" :model="resetForm" :rules="resetRules">
+        <el-form-item label="账号" prop="account">
+          <el-input v-model="resetForm.account" placeholder="请输入账号" />
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="resetForm.email" placeholder="请输入注册邮箱" />
+        </el-form-item>
+        <el-form-item label="新密码" prop="password">
+          <el-input v-model="resetForm.password" type="password" placeholder="请输入新密码" />
+        </el-form-item>
+        <el-form-item label="确认密码" prop="confirmPassword">
+          <el-input v-model="resetForm.confirmPassword" type="password" placeholder="请再次输入密码" />
+        </el-form-item>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="resetPasswordDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="handleResetPassword">确 定</el-button>
+        </div>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -108,6 +132,25 @@ export default {
       capsTooltip: false,
       loading: false,
       showDialog: false,
+      resetPasswordDialogVisible: false,
+      resetForm: {
+        account: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      },
+      resetRules: {
+        account: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+        email: [
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+        ],
+        password: [{ required: true, message: '请输入新密码', trigger: 'blur' }],
+        confirmPassword: [
+          { required: true, message: '请确认密码', trigger: 'blur' },
+          { validator: this.validateConfirmPassword, trigger: 'blur' }
+        ]
+      },
       redirect: undefined,
       otherQuery: {}
     }
@@ -167,6 +210,24 @@ export default {
         } else {
           console.log('error submit!!')
           return false
+        }
+      })
+    },
+
+    validateConfirmPassword(rule, value, callback) {
+      if (value !== this.resetForm.password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    },
+
+    handleResetPassword() {
+      this.$refs.resetForm.validate(valid => {
+        if (valid) {
+          // 这里添加实际的重置密码逻辑
+          this.$message.success('密码重置请求已提交，请查收邮件')
+          this.resetPasswordDialogVisible = false
         }
       })
     },
