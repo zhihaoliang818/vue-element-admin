@@ -76,19 +76,14 @@
           <span>{{ row.orderNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="客户姓名" prop="customerName" width="120px" align="center">
+      <el-table-column label="客户姓名(英文)" prop="customerNameEn" width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.customerName }}</span>
+          <span>{{ row.customerNameEn }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="省份" prop="province" width="100px" align="center">
+      <el-table-column label="国别" prop="country" width="120px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.province }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="市" prop="city" width="100px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.city }}</span>
+          <span>{{ row.country }}</span>
         </template>
       </el-table-column>
       <el-table-column label="性别" prop="gender" width="80px" align="center">
@@ -335,7 +330,8 @@ export default {
         title: '',
         status: 'published',
         visitorNames: [],
-        orderTime: Date.now() // 添加当前时间戳作为默认下单时间
+        orderTime: Date.now(), // 添加当前时间戳作为
+        paymentTime: Date.now() // 新增支付时间默认值
       }
     },
     handleCreate() {

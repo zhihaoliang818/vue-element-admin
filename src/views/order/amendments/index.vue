@@ -335,7 +335,8 @@ export default {
         title: '',
         status: 'published',
         visitorNames: [],
-        orderTime: Date.now() // 添加当前时间戳作为默认下单时间
+        orderTime: Date.now(), // 添加当前时间戳作为默认下单时间
+        paymentTime: Date.now() // 新增支付时间默认值
       }
     },
     handleCreate() {
