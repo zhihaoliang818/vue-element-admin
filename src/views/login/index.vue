@@ -4,10 +4,7 @@
 
       <div class="title-container">
         <h3 class="title">游艇旅游订单管理系统</h3>
-        <div class="action-links">
-          <el-link type="primary" @click="resetPasswordDialogVisible = true">忘记密码？</el-link>
-          <el-link type="success" style="margin-left: 15px;" @click="registerDialogVisible = true">用户注册</el-link>
-        </div>
+
       </div>
 
       <el-form-item prop="username">
@@ -49,21 +46,34 @@
         </el-form-item>
       </el-tooltip>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登 录</el-button>
-
-      <div style="position:relative">
-        <div class="tips">
-          <span>管理员 : admin</span>
-          <span>密码 : 任意</span>
-        </div>
-        <div class="tips">
-          <span style="margin-right:18px;">用户 : editor</span>
-          <span>密码 : 任意</span>
-        </div>
-
+      <div style="display: flex; gap: 15px; margin-bottom: 30px;">
+        <el-button
+          :loading="loading"
+          type="success"
+          style="width: 50%"
+          @click="registerDialogVisible = true"
+        >
+          注 册
+        </el-button>
+        <el-button
+          :loading="loading"
+          type="primary"
+          style="width: 50%"
+          @click.native.prevent="handleLogin"
+        >
+          登 录
+        </el-button>
+      </div>
+      <div class="action-links" style="margin: 10px 0;">
+        <el-link
+          type="primary"
+          style="display: inline-block; margin: 0 auto;"
+          @click="handlePasswordResetClick"
+        >
+          忘记密码？
+        </el-link>
       </div>
     </el-form>
-
     <div class="version-info">
       游艇旅游订单管理系统v1.0
     </div>
@@ -276,7 +286,7 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '111' // Shorter password for testing validation
+        password: '123456' // Shorter password for testing validation
       },
       loginRules: {
         // Use the specific validator function
@@ -475,15 +485,24 @@ export default {
 <style lang="scss">
 /* Shared styles for dialogs (can be unscoped or scoped if preferred) */
 .custom-dialog {
+  .dialog-header-icon {
+      text-align: center;
+      margin-bottom: 20px;
+      .icon-large {
+        font-size: 3em;
+        color: #f56c6c; // 使用红色系突出重置操作
+      }
+  }
   .el-dialog__header {
-    // background-color: #f8f8f8;
+    border-top: 4px solid #f56c6c; // 红色顶部边框
     border-bottom: 1px solid #eee;
     padding: 15px 20px;
-     .el-dialog__title {
-        font-weight: bold;
-        font-size: 18px;
-     }
+    .el-dialog__title {
+      font-weight: bold;
+      font-size: 18px;
+    }
   }
+}
   .el-dialog__body {
     padding: 20px 30px 10px 30px; // Adjust padding
   }
@@ -513,7 +532,6 @@ export default {
         font-weight: 500; // Slightly bolder labels
     }
   }
-}
 
 /* Original unscoped styles (keep as they are) */
 /* Fix input background and cursor color issues */
