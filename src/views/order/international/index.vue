@@ -12,7 +12,7 @@
         <el-option
           v-for="item in [
             { label: '订单编号', value: 'orderNumber' },
-            { label: '客户姓名(英文)', value: 'customerNameEn' },
+            { label: '客户姓名', value: 'customerNameEn' },
             { label: '服务名称', value: 'serviceName' }
           ]"
           :key="item.value"
@@ -76,7 +76,7 @@
           <span>{{ row.orderNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="客户姓名(英文)" prop="customerNameEn" width="150px" align="center">
+      <el-table-column label="客户姓名" prop="customerNameEn" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.customerNameEn }}</span>
         </template>
@@ -151,7 +151,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 400px; margin-left:50px;">
         <el-form-item label="客户姓名" prop="customerName">
           <el-input v-model="temp.customerName" />
         </el-form-item>
@@ -194,28 +194,31 @@
           />
         </el-form-item>
         <el-form-item label="游客信息">
-          <el-input-number
-            v-model="temp.visitorCount"
-            :min="1"
-            :max="10"
-            label="游客人数"
-          />
-          <el-select
-            v-model="temp.visitorNames"
-            multiple
-            filterable
-            allow-create
-            placeholder="请输入游客姓名"
-            style="margin-left: 10px; width: 300px;"
-          />
+          <div style="display: flex; gap: 10px; align-items: center; width: 100%;">
+            <el-input-number
+              v-model="temp.visitorCount"
+              :min="1"
+              :max="10"
+              label="游客人数"
+              style="min-width: 180px;"
+            />
+            <el-select
+              v-model="temp.visitorNames"
+              multiple
+              filterable
+              allow-create
+              placeholder="请输入游客姓名"
+              style="flex: 1; min-width: 200px;"
+            />
+          </div>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
-          Cancel
+          取消
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          Confirm
+          提交
         </el-button>
       </div>
     </el-dialog>
@@ -263,8 +266,8 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: 'Edit',
-        create: 'Create'
+        update: '编辑',
+        create: '创建'
       },
       rules: {
         customerName: [{ required: true, message: '请输入客户姓名', trigger: 'blur' }],
