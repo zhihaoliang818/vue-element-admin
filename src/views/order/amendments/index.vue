@@ -71,9 +71,14 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单编号" prop="orderNumber" width="150px" align="center">
+      <el-table-column label="退改订单编号" prop="amendOrderNo" width="180px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.orderNumber }}</span>
+          <span>{{ row.amendOrderNo }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="原订单编号" prop="originalOrderNo" width="180px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.originalOrderNo }}</span>
         </template>
       </el-table-column>
       <el-table-column label="客户姓名" prop="customerName" width="120px" align="center">
@@ -81,19 +86,14 @@
           <span>{{ row.customerName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="退改单号" prop="amendOrderNo" width="180px" align="center">
+      <el-table-column label="退款金额" prop="refundAmount" width="120px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.amendOrderNo }}</span>
+          <span>¥{{ row.refundAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="原订单号" prop="originalOrderNo" width="180px" align="center">
+      <el-table-column label="退款状态" prop="refundStatus" width="100px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.originalOrderNo }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="性别" prop="gender" width="80px" align="center">
-        <template slot-scope="{row}">
-          <el-tag :type="row.gender === '男' ? 'primary' : 'danger'">{{ row.gender }}</el-tag>
+          <el-tag :type="row.refundStatus === '已通过' ? 'success' : 'danger'">{{ row.refundStatus }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="服务名称" prop="serviceName" width="150px" align="center">
@@ -101,29 +101,14 @@
           <span>{{ row.serviceName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="金额" prop="amount" width="120px" align="center">
+      <el-table-column label="退款金额" prop="refundAmount" width="120px" align="center">
         <template slot-scope="{row}">
-          <span>¥{{ row.amount }}</span>
+          <span>¥{{ row.refundAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="下单时间" prop="orderTime" width="160px" align="center">
+      <el-table-column label="修改时间" prop="updateTime" width="160px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.orderTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="游客人数" prop="visitorCount" width="100px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.visitorCount }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="游客姓名" prop="visitorNames" width="200px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.visitorNames.join(', ') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="支付时间" prop="paymentTime" width="160px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.paymentTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="审核人" prop="auditor" width="120px" align="center">
@@ -134,11 +119,6 @@
       <el-table-column label="审核时间" prop="auditTime" width="160px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.auditTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="修改时间" prop="modifyTime" width="160px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.modifyTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -160,68 +140,31 @@
         <el-form-item label="客户姓名" prop="customerName">
           <el-input v-model="temp.customerName" />
         </el-form-item>
-        <el-form-item label="省份" prop="province">
-          <el-select v-model="temp.province" filterable placeholder="请选择省份" @change="temp.city = ''">
-            <el-option
-              v-for="province in provinceOptions"
-              :key="province"
-              :label="province"
-              :value="province"
-            />
-          </el-select>
+        <el-form-item label="原订单号" prop="originalOrderNo">
+          <el-input v-model="temp.originalOrderNo" />
         </el-form-item>
-        <el-form-item label="城市" prop="city">
-          <el-select v-model="temp.city" filterable :disabled="!temp.province" placeholder="请选择城市">
-            <el-option
-              v-for="city in cityOptions[temp.province] || []"
-              :key="city"
-              :label="city"
-              :value="city"
-            />
-          </el-select>
+        <el-form-item label="退款金额" prop="refundAmount">
+          <el-input v-model.number="temp.refundAmount" type="number" />
         </el-form-item>
-        <el-form-item label="性别" prop="gender">
-          <el-select v-model="temp.gender" class="filter-item">
-            <el-option label="男" value="男" />
-            <el-option label="女" value="女" />
+        <el-form-item label="退款状态" prop="refundStatus">
+          <el-select v-model="temp.refundStatus" class="filter-item">
+            <el-option label="待审核" value="待审核" />
+            <el-option label="已通过" value="已通过" />
+            <el-option label="已拒绝" value="已拒绝" />
           </el-select>
         </el-form-item>
         <el-form-item label="服务项目" prop="serviceName">
           <el-input v-model="temp.serviceName" />
         </el-form-item>
-        <el-form-item label="金额" prop="amount">
-          <el-input v-model.number="temp.amount" type="number" />
+        <el-form-item label="审核人" prop="auditor">
+          <el-input v-model="temp.auditor" />
         </el-form-item>
-        <el-form-item label="下单时间" prop="orderTime">
+        <el-form-item label="审核时间" prop="auditTime">
           <el-date-picker
-            v-model="temp.orderTime"
+            v-model="temp.auditTime"
             type="datetime"
-            placeholder="选择下单时间"
+            placeholder="选择审核时间"
             value-format="timestamp"
-          />
-        </el-form-item>
-        <el-form-item label="支付时间" prop="paymentTime">
-          <el-date-picker
-            v-model="temp.paymentTime"
-            type="datetime"
-            placeholder="选择支付时间"
-            value-format="timestamp"
-          />
-        </el-form-item>
-        <el-form-item label="游客信息">
-          <el-input-number
-            v-model="temp.visitorCount"
-            :min="1"
-            :max="10"
-            label="游客人数"
-          />
-          <el-select
-            v-model="temp.visitorNames"
-            multiple
-            filterable
-            allow-create
-            placeholder="请输入游客姓名"
-            style="margin-left: 10px; width: 300px;"
           />
         </el-form-item>
       </el-form>
@@ -260,14 +203,6 @@ export default {
         searchValue: undefined, // 搜索内容
         sort: '+id'
       },
-      provinceOptions: ['北京市', '上海市', '江苏省', '浙江省', '广东省'],
-      cityOptions: {
-        '北京市': ['东城区', '西城区', '朝阳区', '海淀区'],
-        '上海市': ['黄浦区', '徐汇区', '长宁区', '静安区'],
-        '江苏省': ['南京市', '苏州市', '无锡市', '常州市'],
-        '浙江省': ['杭州市', '宁波市', '温州市', '绍兴市'],
-        '广东省': ['广州市', '深圳市', '珠海市', '东莞市']
-      },
       temp: {
         id: undefined,
         importance: 1,
@@ -284,17 +219,15 @@ export default {
       },
       rules: {
         customerName: [{ required: true, message: '请输入客户姓名', trigger: 'blur' }],
-        serviceName: [{ required: true, message: '请选择服务项目', trigger: 'change' }],
-        amount: [{ required: true, message: '请输入金额', trigger: 'blur' }],
-        orderTime: [{ type: 'date', required: true, message: '请选择下单时间', trigger: 'change' }],
-        visitorCount: [
-          { required: true, message: '请输入游客人数', trigger: 'blur' },
-          { type: 'number', min: 1, message: '至少1位游客' }
+        originalOrderNo: [{ required: true, message: '请输入原订单号', trigger: 'blur' }],
+        refundAmount: [
+          { required: true, message: '请输入退款金额', trigger: 'blur' },
+          { type: 'number', min: 0, message: '金额必须大于等于0' }
         ],
-        visitorNames: [
-          { type: 'array', required: true, message: '请至少输入一个游客姓名', trigger: 'change' },
-          { validator: (rule, value, callback) => value.length > 0 ? callback() : callback(new Error('请至少输入一个游客姓名')) }
-        ]
+        refundStatus: [{ required: true, message: '请选择退款状态', trigger: 'change' }],
+        serviceName: [{ required: true, message: '请选择服务项目', trigger: 'change' }],
+        auditor: [{ required: true, message: '请输入审核人', trigger: 'blur' }],
+        auditTime: [{ type: 'date', required: true, message: '请选择审核时间', trigger: 'change' }]
       }
     }
   },
@@ -334,9 +267,8 @@ export default {
         timestamp: new Date(),
         title: '',
         status: 'published',
-        visitorNames: [],
-        orderTime: Date.now(), // 添加当前时间戳作为默认下单时间
-        paymentTime: Date.now() // 新增支付时间默认值
+        auditor: '',
+        auditTime: Date.now()
       }
     },
     handleCreate() {
@@ -352,11 +284,6 @@ export default {
         if (valid) {
           // 生成唯一ID
           this.temp.id = Date.now().toString() + Math.random().toString(36).substr(2, 5)
-
-          // 处理空游客姓名的情况
-          if (this.temp.visitorNames.length === 0) {
-            this.temp.visitorNames.push('未命名游客')
-          }
 
           createOrder({ ...this.temp }).then(() => {
             this.list.unshift({ ...this.temp })
