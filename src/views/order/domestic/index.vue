@@ -408,13 +408,22 @@ export default {
       })
     },
     handleDelete(row, index) {
-      this.$notify({
-        title: 'Success',
-        message: '订单删除成功',
-        type: 'success',
-        duration: 2000
+      this.$confirm('确定要删除这条订单记录吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.list.splice(index, 1)
+        this.$notify({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$notify({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
-      this.list.splice(index, 1)
     }
   }
 }
