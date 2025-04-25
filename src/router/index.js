@@ -57,18 +57,33 @@ export const constantRoutes = [
    * 根路由 - 首页
    * 注意：这里对应侧边栏的「首页」父级菜单
    */
+  // 未开放
+  // {
+  //   path: '/log',
+  //   component: Layout,
+  //   redirect: '/user',
+  //   meta: { title: '用户管理', icon: 'el-icon-notebook-2' },
+  //   children: [
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/views/user-manger'),
+  //       name: 'LogList',
+  //       meta: { title: '用户管理', icon: 'el-icon-tickets' }
+  //     }
+  //   ]
+  // },
   {
-    path: '/manger',
+    path: '/order',
     component: Layout,
     meta: {
-      title: '管理', // 修改此处将显示名称改为「管理」
+      title: '订单管理', // 修改此处将显示名称改为「订单管理」
       icon: 'table' // 侧边栏图标（Element UI图标名称）
     },
-    redirect: 'noRedirect',
+    redirect: 'noRedirect', // 重定向到子路由
     children: [
       // 境内订单管理路由
       {
-        path: 'domestic-orders',
+        path: 'domestic',
         component: () => import('@/views/order/domestic'),
         name: 'DomesticOrders',
         meta: {
@@ -79,7 +94,7 @@ export const constantRoutes = [
 
       // 境外订单管理路由
       {
-        path: 'international-orders',
+        path: 'international',
         component: () => import('@/views/order/international'),
         name: 'InternationalOrders',
         meta: {
@@ -90,7 +105,7 @@ export const constantRoutes = [
 
       // 退改订单管理路由
       {
-        path: 'order-amendments',
+        path: 'amendments',
         component: () => import('@/views/order/amendments'),
         name: 'OrderAmendments',
         meta: {

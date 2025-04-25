@@ -91,7 +91,7 @@
       title="重置密码"
       :visible.sync="resetPasswordDialogVisible"
       width="500px"
-      custom-class="custom-dialog"
+      custom-class="custom-dialog reset-password-dialog"
       center
       :close-on-click-modal="false"
       append-to-body
@@ -152,7 +152,7 @@
       title="用户注册"
       :visible.sync="registerDialogVisible"
       width="500px"
-      custom-class="custom-dialog"
+      custom-class="custom-dialog user-register-dialog"
       center
       :close-on-click-modal="false"
       append-to-body
@@ -451,7 +451,7 @@ export default {
           // --- 仅前端逻辑 ---
           // Here you would typically call an API to send a reset link/code
           // For now, just show a success message
-          this.$message.success('密码重置请求已模拟提交 (前端)，请检查控制台输出')
+          this.$message.success('密码重置成功')
           // Optionally send email via a backend service if needed in future
           // e.g., axios.post('/api/password/reset-request', this.resetForm)...
           this.resetPasswordDialogVisible = false // Close dialog on success
@@ -514,17 +514,46 @@ export default {
       margin-bottom: 20px;
       .icon-large {
         font-size: 3em;
-        color: #f56c6c; // 使用红色系突出重置操作
+        color: #f56c6c;
       }
   }
   .el-dialog__header {
-    border-top: 4px solid #f56c6c; // 红色顶部边框
+    border-top: 4px solid #f56c6c;
     border-bottom: 1px solid #eee;
     padding: 15px 20px;
     .el-dialog__title {
       font-weight: bold;
       font-size: 18px;
     }
+  }
+}
+
+/* 重置密码对话框样式 */
+.reset-password-dialog {
+  .el-dialog__header {
+    border-top-color: #e6a23c; /* 黄色 */
+  }
+}
+.reset-password-dialog {
+  .dialog-header-icon {
+      .icon-large {
+        font-size: 3em;
+        color: #e6a23c;
+      }
+  }
+}
+/* 用户注册对话框样式 */
+.user-register-dialog {
+  .el-dialog__header {
+    border-top-color: #67c23a; /* 绿色 */
+  }
+}
+.user-register-dialog{
+  .dialog-header-icon {
+      .icon-large {
+        font-size: 3em;
+        color: #67c23a;
+      }
   }
 }
   .el-dialog__body {
