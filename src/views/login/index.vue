@@ -1,15 +1,15 @@
+<!-- 登录页面主模板 -->
 <template>
   <div class="login-container">
+    <!-- 登录表单区域 -->
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
+      <!-- 系统标题 -->
       <div class="title-container">
         <h3 class="title">游艇旅游订单管理系统</h3>
-        <div class="action-links">
-          <el-link type="primary" @click="resetPasswordDialogVisible = true">忘记密码？</el-link>
-          <el-link type="success" style="margin-left: 15px;" @click="registerDialogVisible = true">用户注册</el-link>
-        </div>
       </div>
 
+      <!-- 用户名输入 -->
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
@@ -25,6 +25,7 @@
         />
       </el-form-item>
 
+      <!-- 密码输入（包含大写锁定提示） -->
       <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
         <el-form-item prop="password">
           <span class="svg-container">
@@ -49,18 +50,26 @@
         </el-form-item>
       </el-tooltip>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登 录</el-button>
-
-      <div style="position:relative">
-        <div class="tips">
-          <span>管理员 : admin</span>
-          <span>密码 : 任意</span>
-        </div>
-        <div class="tips">
-          <span style="margin-right:18px;">用户 : editor</span>
-          <span>密码 : 任意</span>
-        </div>
-
+      <div style="display: flex; gap: 15px; margin-bottom: 30px;">
+        <el-button
+          :loading="loading"
+          type="success"
+          style="width: 50%"
+          @click="registerDialogVisible = true"
+        >
+          注 册
+        </el-button>
+        <el-button
+          :loading="loading"
+          type="primary"
+          style="width: 50%"
+          @click.native.prevent="handleLogin"
+        >
+          登 录
+        </el-button>
+      </div>
+      <div class="forget" style="text-align: center;">
+        <el-link type="primary" style="opacity: 0.8;" @click="resetPasswordDialogVisible = true">忘记密码？</el-link>
       </div>
     </el-form>
 
@@ -68,6 +77,7 @@
       游艇旅游订单管理系统v1.0
     </div>
 
+    <!-- 第三方登录对话框 -->
     <el-dialog title="Or connect with" :visible.sync="showDialog">
       Can not be simulated on local, so please combine you own business simulation! ! !
       <br>
@@ -76,11 +86,12 @@
       <social-sign />
     </el-dialog>
 
+    <!-- 密码重置对话框 -->
     <el-dialog
       title="重置密码"
       :visible.sync="resetPasswordDialogVisible"
       width="500px"
-      custom-class="custom-dialog"
+      custom-class="custom-dialog reset-password-dialog"
       center
       :close-on-click-modal="false"
       append-to-body
@@ -136,11 +147,12 @@
       </div>
     </el-dialog>
 
+    <!-- 用户注册对话框 -->
     <el-dialog
       title="用户注册"
       :visible.sync="registerDialogVisible"
       width="500px"
-      custom-class="custom-dialog"
+      custom-class="custom-dialog user-register-dialog"
       center
       :close-on-click-modal="false"
       append-to-body
@@ -208,6 +220,7 @@ export default {
   components: { SocialSign },
   data() {
     // --- Validation Functions ---
+    // --- 验证函数区域 ---
     const validateUsernameInput = (rule, value, callback) => {
       // Replace with your actual username validation logic if different from validUsername
       if (!value || value.trim().length === 0) {
@@ -272,11 +285,12 @@ export default {
       }
     }
     // --- End Validation Functions ---
+    // --- 验证函数区域结束 ---
 
     return {
       loginForm: {
         username: 'admin',
-        password: '111' // Shorter password for testing validation
+        password: '123456' // Shorter password for testing validation
       },
       loginRules: {
         // Use the specific validator function
@@ -322,7 +336,9 @@ export default {
       otherQuery: {}
     }
   },
+  // 组件状态监听
   watch: {
+    // 路由变化处理
     $route: {
       handler: function(route) {
         const query = route.query
@@ -333,7 +349,7 @@ export default {
       },
       immediate: true
     },
-    // Reset dialog visibility to clear form when opened (optional)
+    // 监听密码重置对话框状态
     resetPasswordDialogVisible(newValue) {
       if (newValue) {
         this.$nextTick(() => {
@@ -342,6 +358,7 @@ export default {
         })
       }
     },
+    // 监听注册对话框状态
     registerDialogVisible(newValue) {
       if (newValue) {
         this.$nextTick(() => {
@@ -351,11 +368,13 @@ export default {
       }
     }
   },
+  // 组件生命周期钩子
   created() {
+    // 二维码扫描事件监听（当前注释）
     // window.addEventListener('storage', this.afterQRScan)
   },
   mounted() {
-    // Focus logic remains the same
+    // 自动聚焦逻辑
     if (this.loginForm.username === '') {
       this.$refs.username.focus()
     } else if (this.loginForm.password === '') {
@@ -363,24 +382,29 @@ export default {
     }
   },
   destroyed() {
+    // 组件销毁时移除事件监听
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    // 检查大写锁定状态
     checkCapslock(e) {
       const { key } = e
       this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
     },
+    // 切换密码显示/隐藏
     showPwd() {
       this.passwordType = this.passwordType === 'password' ? '' : 'password'
       this.$nextTick(() => {
         this.$refs.password.focus()
       })
     },
+    // 处理登录提交
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
           // --- Replace with your actual login API call ---
+          // --- 替换为实际的登录API调用 ---
           console.log('Attempting login with:', this.loginForm)
           // Mock API call
           setTimeout(() => {
@@ -409,6 +433,7 @@ export default {
             }
           }, 1000) // Simulate network delay
           // --- End of mock/actual API call ---
+          // --- 模拟/实际API调用结束 ---
         } else {
           console.log('Login form validation failed!')
           return false
@@ -417,18 +442,21 @@ export default {
     },
 
     // Method to handle Reset Password submission
+    // 处理重置密码提交
     handleResetPassword() {
       this.$refs.resetForm.validate(valid => {
         if (valid) {
           console.log('Reset Password Form Data:', this.resetForm)
           // --- Frontend Only Logic ---
+          // --- 仅前端逻辑 ---
           // Here you would typically call an API to send a reset link/code
           // For now, just show a success message
-          this.$message.success('密码重置请求已模拟提交 (前端)，请检查控制台输出')
+          this.$message.success('密码重置成功')
           // Optionally send email via a backend service if needed in future
           // e.g., axios.post('/api/password/reset-request', this.resetForm)...
           this.resetPasswordDialogVisible = false // Close dialog on success
           // --- End Frontend Only Logic ---
+          // --- 仅前端逻辑结束 ---
         } else {
           console.log('Reset password form validation failed!')
           this.$message.error('请检查输入项是否正确')
@@ -438,6 +466,7 @@ export default {
     },
 
     // Method to handle Registration submission
+    // 处理注册提交
     handleRegister() {
       this.$refs.registerForm.validate(valid => {
         if (valid) {
@@ -445,7 +474,7 @@ export default {
           // --- Frontend Only Logic ---
           // Here you would typically call an API to register the user
           // For now, just show a success message
-          this.$message.success('注册成功 (前端模拟)，请检查控制台输出')
+          this.$message.success('注册成功')
           // Optionally call backend API:
           // e.g., axios.post('/api/register', this.registerForm)...
           this.registerDialogVisible = false // Close dialog on success
@@ -459,6 +488,8 @@ export default {
     },
 
     // Utility method from original code
+    // 从原始代码继承的工具方法
+    // 从原始代码继承的工具方法
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
         if (cur !== 'redirect') {
@@ -468,22 +499,63 @@ export default {
       }, {})
     }
     // afterQRScan() { ... } // Keep if needed
+    // 二维码扫描后的处理（保留如果需要）
   }
 }
 </script>
 
+<!-- 全局样式 -->
 <style lang="scss">
 /* Shared styles for dialogs (can be unscoped or scoped if preferred) */
+/* 对话框的共享样式（可以是全局或局部作用域） */
 .custom-dialog {
+  .dialog-header-icon {
+      text-align: center;
+      margin-bottom: 20px;
+      .icon-large {
+        font-size: 3em;
+        color: #f56c6c;
+      }
+  }
   .el-dialog__header {
-    // background-color: #f8f8f8;
+    border-top: 4px solid #f56c6c;
     border-bottom: 1px solid #eee;
     padding: 15px 20px;
-     .el-dialog__title {
-        font-weight: bold;
-        font-size: 18px;
-     }
+    .el-dialog__title {
+      font-weight: bold;
+      font-size: 18px;
+    }
   }
+}
+
+/* 重置密码对话框样式 */
+.reset-password-dialog {
+  .el-dialog__header {
+    border-top-color: #e6a23c; /* 黄色 */
+  }
+}
+.reset-password-dialog {
+  .dialog-header-icon {
+      .icon-large {
+        font-size: 3em;
+        color: #e6a23c;
+      }
+  }
+}
+/* 用户注册对话框样式 */
+.user-register-dialog {
+  .el-dialog__header {
+    border-top-color: #67c23a; /* 绿色 */
+  }
+}
+.user-register-dialog{
+  .dialog-header-icon {
+      .icon-large {
+        font-size: 3em;
+        color: #67c23a;
+      }
+  }
+}
   .el-dialog__body {
     padding: 20px 30px 10px 30px; // Adjust padding
   }
@@ -513,7 +585,6 @@ export default {
         font-weight: 500; // Slightly bolder labels
     }
   }
-}
 
 /* Original unscoped styles (keep as they are) */
 /* Fix input background and cursor color issues */
@@ -528,6 +599,7 @@ $cursor: #fff;
 }
 
 /* Reset element-ui css for login form */
+/* 重置element-ui的登录表单样式 */
 .login-container {
   .el-input {
     display: inline-block;
@@ -560,8 +632,10 @@ $cursor: #fff;
 }
 </style>
 
+<!-- 组件私有样式 -->
 <style lang="scss" scoped>
 // Original scoped styles (keep most, adjust where needed)
+// 原始作用域样式（保留大部分，按需调整）
 .version-info {
   position: fixed; // Keep it fixed at the bottom
   bottom: 20px;
@@ -626,14 +700,6 @@ $light_gray:#eee;
       margin: 0px auto 20px auto; // Space below title
       text-align: center;
       font-weight: bold;
-    }
-    // Style for the links container
-    .action-links {
-       text-align: center; // Center the links below the title
-       margin-top: 5px;
-       .el-link {
-         font-size: 14px; // Standard link size
-       }
     }
   }
 

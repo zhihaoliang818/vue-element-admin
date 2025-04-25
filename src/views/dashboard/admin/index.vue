@@ -33,22 +33,32 @@ export default {
         {
           title: '境内订单管理',
           icon: 'el-icon-s-order',
-          path: '/manager/domestic-orders'
+          path: '/order/domestic'
         },
         {
           title: '境外订单管理',
           icon: 'el-icon-s-promotion',
-          path: '/manager/international-orders'
+          path: '/order/international'
         },
         {
           title: '退改订单管理',
           icon: 'el-icon-refresh-left',
-          path: '/manager/order-amendments'
+          path: '/order/amendments'
         },
         {
-          title: '数据分析',
-          icon: 'el-icon-data-analysis',
-          path: '/manager/data-analysis'
+          title: '境内与境外趋势',
+          icon: 'el-icon-s-marketing',
+          path: '/charts/line'
+        },
+        {
+          title: '月度数据统计',
+          icon: 'el-icon-date',
+          path: '/charts/baifen'
+        },
+        {
+          title: '系统日志查询',
+          icon: 'el-icon-tickets',
+          path: '/log/list'
         }
       ]
     }
