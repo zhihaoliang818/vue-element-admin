@@ -1,97 +1,80 @@
 <template>
-  <div class="app-container">
-    <el-card>
-      <!-- 日志表格内容 -->
-      <el-table :data="tableData" style="width: 100%">
-        <el-table-column prop="id" label="ID" width="80" align="center" />
-        <el-table-column prop="account" label="账号" width="120" align="center" />
-        <el-table-column prop="operator" label="操作人" width="120" align="center" />
-        <el-table-column prop="targetSort" label="目标排序" width="120" align="center" />
-        <el-table-column prop="backendTime" label="后台时间" width="180" align="center" />
-        <el-table-column label="操作" width="120" align="center">
-          <template #default="scope">
-            <el-button type="text" size="small" @click="handleDelete(scope.row)">[删除]</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
+  <div class="log-table-container">
+    <table class="log-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>账号</th>
+          <th>操作人</th>
+          <th>具体操作</th>
+          <th>操作时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="log in logs" :key="log.id">
+          <td>{{ log.id }}</td>
+          <td>{{ log.account }}</td>
+          <td>{{ log.operator }}</td>
+          <td>{{ log.action }}</td>
+          <td>{{ log.time }}</td>
+          <td>
+            <button class="delete-btn" @click="deleteLog(log.id)">删除</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- 分页组件 -->
+    <div class="pagination-container">
+      <el-pagination
+        :current-page="currentPage"
+        :page-sizes="[5, 10, 20, 50]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="logs.length"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  name: 'LogTable',
   data() {
     return {
-      tableData: [
-        // 示例数据
-        {
-          id: 1,
-          account: 'admin',
-          operator: 'admin',
-          targetSort: '登录',
-          backendTime: '2025-01-11 12:02:10'
-        },
-        {
-          id: 2,
-          account: 'xieqiqin',
-          operator: '工作区',
-          targetSort: '登录',
-          backendTime: '2025-01-09 12:03:31'
-        },
-        {
-          id: 3,
-          account: 'xieqiqin',
-          operator: '工作区',
-          targetSort: '登录',
-          backendTime: '2025-01-08 16:23:34'
-        },
-        {
-          id: 4,
-          account: 'lumei',
-          operator: '权限',
-          targetSort: '登录',
-          backendTime: '2025-01-08 16:29:30'
-        },
-        {
-          id: 5,
-          account: 'lumei',
-          operator: '权限',
-          targetSort: '登录',
-          backendTime: '2025-01-07 18:29:30'
-        },
-        {
-          id: 6,
-          account: 'xiafeng',
-          operator: '工期数',
-          targetSort: '登录',
-          backendTime: '2025-01-08 19:13:06'
-        },
-        {
-          id: 7,
-          account: 'xiafeng',
-          operator: '工期数',
-          targetSort: '登录',
-          backendTime: '2025-01-09 12:30:16'
-        },
-        {
-          id: 8,
-          account: 'zhuoxue',
-          operator: '权限',
-          targetSort: '登录',
-          backendTime: '2025-01-03 19:30:58'
-        }
-      ]
+      logs: [
+        { id: 1, account: 'admin', operator: 'admin', action: '登录', time: '2024-02-11 12:02:10' },
+        { id: 2, account: 'xiaomi', operator: '王小米', action: '登录', time: '2024-02-09 12:01:31' },
+        { id: 3, account: 'xiaomi', operator: '王小米', action: '登录', time: '2024-02-08 19:25:34' },
+        { id: 4, account: 'liudashuai', operator: '刘大帅', action: '登录', time: '2024-02-08 19:20:30' },
+        { id: 5, account: 'liudashuai', operator: '刘大帅', action: '登录', time: '2024-02-07 18:50:30' },
+        { id: 6, account: 'wangting', operator: '王婷', action: '登录', time: '2024-02-06 19:31:06' },
+        { id: 7, account: 'wangting', operator: '王婷', action: '登录', time: '2024-02-05 12:38:16' },
+        { id: 8, account: 'zhaolong', operator: '赵龙', action: '登录', time: '2024-02-03 19:30:56' }
+      ],
+      currentPage: 1, // 当前页码
+      pageSize: 5 // 每页显示条数
+    }
+  },
+  computed: {
+    // 计算分页后的数据
+    paginatedLogs() {
+      const start = (this.currentPage - 1) * this.pageSize
+      const end = start + this.pageSize
+      return this.logs.slice(start, end)
     }
   },
   methods: {
-    handleDelete(row) {
+    deleteLog(id) {
       this.$confirm('确定要删除这条记录吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         // 这里添加实际的删除逻辑
-        this.tableData = this.tableData.filter(item => item.id !== row.id)
+        this.logs = this.logs.filter(log => log.id !== id)
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -108,7 +91,43 @@ export default {
 </script>
 
 <style scoped>
-.app-container {
+.log-table-container {
   padding: 20px;
+  font-family: Arial, sans-serif;
 }
+
+.log-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.log-table th, .log-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  text-align: center;
+}
+
+.log-table td {
+  background-color: white;
+}
+
+.log-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
+
 </style>
