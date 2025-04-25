@@ -156,12 +156,18 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 400px; margin-left:50px;">
         <el-form-item label="客户姓名" prop="customerName">
-          <el-input v-model="temp.customerName" />
+          <el-input v-model="temp.customerName" style="width: 300px;" />
         </el-form-item>
         <el-form-item label="省份" prop="province">
-          <el-select v-model="temp.province" filterable placeholder="请选择省份" @change="temp.city = ''">
+          <el-select
+            v-model="temp.province"
+            filterable
+            placeholder="请选择省份"
+            style="width: 300px;"
+            @change="temp.city = ''"
+          >
             <el-option
               v-for="province in provinceOptions"
               :key="province"
@@ -171,7 +177,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="城市" prop="city">
-          <el-select v-model="temp.city" filterable :disabled="!temp.province" placeholder="请选择城市">
+          <el-select v-model="temp.city" filterable :disabled="!temp.province" placeholder="请选择城市" style="width: 300px;">
             <el-option
               v-for="city in cityOptions[temp.province] || []"
               :key="city"
@@ -181,16 +187,16 @@
           </el-select>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
-          <el-select v-model="temp.gender" class="filter-item">
+          <el-select v-model="temp.gender" style="width: 300px;">
             <el-option label="男" value="男" />
             <el-option label="女" value="女" />
           </el-select>
         </el-form-item>
         <el-form-item label="服务项目" prop="serviceName">
-          <el-input v-model="temp.serviceName" />
+          <el-input v-model="temp.serviceName" style="width: 300px;" />
         </el-form-item>
         <el-form-item label="金额" prop="amount">
-          <el-input v-model.number="temp.amount" type="number" />
+          <el-input v-model.number="temp.amount" type="number" style="width: 300px;" />
         </el-form-item>
         <el-form-item label="下单时间" prop="orderTime">
           <el-date-picker
@@ -198,6 +204,7 @@
             type="datetime"
             placeholder="选择下单时间"
             value-format="timestamp"
+            style="width: 300px;"
           />
         </el-form-item>
         <el-form-item label="支付时间" prop="paymentTime">
@@ -209,28 +216,31 @@
           />
         </el-form-item>
         <el-form-item label="游客信息">
-          <el-input-number
-            v-model="temp.visitorCount"
-            :min="1"
-            :max="10"
-            label="游客人数"
-          />
-          <el-select
-            v-model="temp.visitorNames"
-            multiple
-            filterable
-            allow-create
-            placeholder="请输入游客姓名"
-            style="margin-left: 10px; width: 300px;"
-          />
+          <div style="display: flex; gap: 10px; align-items: center; width: 100%;">
+            <el-input-number
+              v-model="temp.visitorCount"
+              :min="1"
+              :max="10"
+              label="游客人数"
+              style="min-width: 180px;"
+            />
+            <el-select
+              v-model="temp.visitorNames"
+              multiple
+              filterable
+              allow-create
+              placeholder="请输入游客姓名"
+              style="flex: 1; min-width: 200px;"
+            />
+          </div>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
-          Cancel
+          取消
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          Confirm
+          提交
         </el-button>
       </div>
     </el-dialog>
@@ -279,8 +289,8 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: 'Edit',
-        create: 'Create'
+        update: '编辑',
+        create: '创建'
       },
       rules: {
         customerName: [{ required: true, message: '请输入客户姓名', trigger: 'blur' }],
@@ -398,13 +408,22 @@ export default {
       })
     },
     handleDelete(row, index) {
-      this.$notify({
-        title: 'Success',
-        message: '订单删除成功',
-        type: 'success',
-        duration: 2000
+      this.$confirm('确定要删除这条订单记录吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.list.splice(index, 1)
+        this.$notify({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$notify({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
-      this.list.splice(index, 1)
     }
   }
 }
