@@ -17,13 +17,13 @@ const chartsRouter = {
       path: 'line',
       component: () => import('@/views/charts/line'),
       name: 'LineChart',
-      meta: { title: '近2年境内、外订单数占比', noCache: true }
+      meta: { title: '境内与境外', noCache: true }
     },
     {
       path: 'baifen',
       component: () => import('@/views/charts/baifen'),
       name: 'baifenChart',
-      meta: { title: '近2年每月的订单数占比', noCache: true }
+      meta: { title: '近两年每月', noCache: true }
     }
   ]
 }
