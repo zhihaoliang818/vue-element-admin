@@ -243,7 +243,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20,
+        limit: 7,
         searchKey: undefined, // 搜索字段：orderNumber/customerName/serviceName
         searchValue: undefined, // 搜索内容
         sort: '+id'

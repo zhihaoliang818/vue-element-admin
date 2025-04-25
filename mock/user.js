@@ -18,7 +18,7 @@ const users = {
   'editor-token': {
     roles: ['editor'],
     introduction: 'I am an editor',
-    avatar: 'https://www.img520.com/wJkeOy.png',
+    avatar: '/images/kedaya.png',
     name: 'Normal Editor'
   }
 }
