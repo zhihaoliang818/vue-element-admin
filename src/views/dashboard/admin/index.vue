@@ -31,29 +31,34 @@ export default {
       // 更新后的 navItems 配置
       navItems: [
         {
+          title: '用户管理',
+          icon: 'el-icon-user',
+          path: '/user-manage'
+        },
+        {
           title: '境内订单管理',
           icon: 'el-icon-s-order',
-          path: '/order/domestic'
+          path: '/domestic'
         },
         {
           title: '境外订单管理',
           icon: 'el-icon-s-promotion',
-          path: '/order/international'
+          path: '/international'
         },
         {
           title: '退改订单管理',
           icon: 'el-icon-refresh-left',
-          path: '/order/amendments'
+          path: '/amendments'
         },
         {
           title: '境内与境外趋势',
           icon: 'el-icon-s-marketing',
-          path: '/charts/line'
+          path: '/line'
         },
         {
           title: '月度数据统计',
           icon: 'el-icon-date',
-          path: '/charts/baifen'
+          path: '/baifen'
         },
         {
           title: '系统日志查询',

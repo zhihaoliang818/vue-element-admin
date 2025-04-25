@@ -6,9 +6,6 @@ Vue.use(Router)
 /* 布局组件 - 包含侧边栏、导航栏等公共布局 */
 import Layout from '@/layout'
 
-/* 路由模块 - 只保留需要的路由模块 */
-import chartsRouter from './modules/charts'
-
 /**
  * 常量路由（不需要权限校验的路由）
  */
@@ -66,7 +63,7 @@ export const constantRoutes = [
       name: 'DomesticOrders',
       meta: {
         title: '用户管理',
-        icon: 'el-icon-s-order'
+        icon: 'el-icon-user'
       }
     }]
   },
@@ -120,8 +117,36 @@ export const constantRoutes = [
  * 异步路由（需要动态加载的权限路由）
  */
 export const asyncRoutes = [
-  // 图表模块（从单独模块文件引入）
-  chartsRouter,
+// 图标分析
+  {
+    path: '/line',
+    component: Layout,
+    children: [{
+      path: '',
+      component: () => import('@/views/charts/line'),
+      name: 'LineChart',
+      meta: {
+        icon: 'el-icon-s-marketing', // 修改为境内与境外趋势图标
+        title: '境内与境外趋势',
+        noCache: true
+      }
+    }]
+  },
+  {
+    path: '/baifen',
+    component: Layout,
+    children: [{
+      path: '',
+      component: () => import('@/views/charts/baifen'),
+      name: 'baifenChart',
+      meta: {
+        icon: 'el-icon-date', // 修改为月度数据统计图标
+        title: '月度数据统计',
+        noCache: true
+      }
+    }]
+  },
+  // 日志
   {
     path: '/log',
     component: Layout,
@@ -132,7 +157,7 @@ export const asyncRoutes = [
         path: 'list',
         component: () => import('@/views/log-table/index'),
         name: 'LogList',
-        meta: { title: '日志列表', icon: 'el-icon-tickets' }
+        meta: { title: '系统日志查询', icon: 'el-icon-tickets' } // 修改标题和保持图标
       }
     ]
   },
