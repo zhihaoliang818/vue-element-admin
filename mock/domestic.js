@@ -21,7 +21,7 @@ for (let i = 0; i < count; i++) {
   const modifyTime = generateFutureDate(auditTime, 0, 5)      // 修改时间允许当天
   
   List.push(Mock.mock({
-    id: '@increment',
+    id: i + 1,
     orderNumber: Mock.Random.string('number', 12),
     customerName: Mock.Random.cname(),
     province: Mock.Random.province(),

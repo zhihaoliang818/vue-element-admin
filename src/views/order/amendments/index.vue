@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 0 0; background: none; border-radius: 8px; margin-bottom: 10px;">
-      <el-select
+      <!-- <el-select
         v-model="listQuery.searchKey"
         placeholder="搜索字段"
         clearable
@@ -43,7 +43,7 @@
       >
         <i class="el-icon-search" style="margin-right: 6px;" />
         搜索
-      </el-button>
+      </el-button> -->
 
       <el-button
         class="filter-item"

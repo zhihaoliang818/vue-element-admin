@@ -1,13 +1,19 @@
 <template>
   <div class="app-container">
-    <div class="filter-container" style="margin-bottom: 20px;">
-      <el-input v-model="listQuery.account" placeholder="账号" style="width: 200px; margin-right: 10px;" class="filter-item" @keyup.enter.native="handleFilter" />
+    <div class="filter-container" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 0 0; background: none; border-radius: 8px; margin-bottom: 10px;">
+      <!-- <el-input v-model="listQuery.account" placeholder="账号" style="width: 200px; margin-right: 10px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-input v-model="listQuery.name" placeholder="姓名" style="width: 200px; margin-right: 10px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-input v-model="listQuery.email" placeholder="邮箱" style="width: 200px; margin-right: 10px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" style="margin-right: 10px;" @click="handleFilter">
         搜索
-      </el-button>
-      <el-button class="filter-item" style="margin-left: 0px;" type="success" icon="el-icon-edit" @click="handleCreate">
+      </el-button> -->
+      <el-button
+        class="filter-item"
+        style="height: 40px; border-radius: 6px; padding: 0 20px; background: linear-gradient(135deg, #67c23a, #529b2e); border: none; box-shadow: 0 2px 6px rgba(103, 194, 58, 0.3);"
+        type="success"
+        icon="el-icon-edit"
+        @click="handleCreate"
+      >
         新增用户
       </el-button>
     </div>
@@ -187,7 +193,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 10, // Default limit
+        limit: 10,
         account: undefined,
         name: undefined,
         email: undefined,

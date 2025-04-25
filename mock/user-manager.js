@@ -12,13 +12,13 @@ for (let i = 0; i < count; i++) {
   const updatedAt = Mock.Random.integer(createdAt, currentDate) // Ensure updatedAt is after or same as createdAt
 
   List.push(Mock.mock({
-    id: '@increment',
+    id: i + 1,
     account: Mock.Random.word(6, 12), // Random word for account name
     // Mock.js doesn't have a specific password generator, using string
     password_hash: Mock.Random.string('lower', 32), // Simulate a hashed password (don't store plain text!)
     email: Mock.Random.email(),
     name: Mock.Random.cname(),
-    gender: Mock.Random.pick(['male', 'female', 'other']), // Use values consistent with form
+    gender: Mock.Random.pick(['male', 'female']), // Use values consistent with form
     address: Mock.Random.county(true), // Generate a full address string
     createdAt: createdAt, // Creation timestamp
     updatedAt: updatedAt  // Last update timestamp

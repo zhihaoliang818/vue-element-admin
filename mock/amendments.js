@@ -5,7 +5,7 @@ const count = 100
 
 for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
-    id: '@increment',
+    id: i + 1,
     orderNumber: Mock.Random.string('number', 12),
     customerName: Mock.Random.cname(),
     amendOrderNo: 'TG' + Mock.Random.string('number', 8),
