@@ -1,9 +1,25 @@
 const Mock = require('mockjs')
-
 const List = []
 const count = 100
 
+// 定义时间范围：2020-01-01 至当前
+const startDate = new Date('2020-01-01').getTime()  // 2020年1月1日的时间戳
+const currentDate = Date.now()                       // 当前时间的时间戳
+
+// 辅助函数：生成未来日期（含当前）
+const generateFutureDate = (baseTime, minDays, maxDays) => {
+  const days = Mock.Random.integer(minDays, maxDays)
+  return baseTime + days * 24 * 60 * 60 * 1000
+}
+
 for (let i = 0; i < count; i++) {
+  // 生成 2020-01-01 到当前时间之间的随机时间戳
+  const baseOrderTime = Mock.Random.integer(startDate, currentDate)
+  
+  const paymentTime = generateFutureDate(baseOrderTime, 1, 5) // 支付时间至少+1天
+  const auditTime = generateFutureDate(paymentTime, 1, 5)     // 审核时间至少+1天
+  const modifyTime = generateFutureDate(auditTime, 0, 5)      // 修改时间允许当天
+  
   List.push(Mock.mock({
     id: '@increment',
     orderNumber: Mock.Random.string('number', 12),
@@ -13,16 +29,17 @@ for (let i = 0; i < count; i++) {
     gender: Mock.Random.pick(['男', '女']),
     serviceName: Mock.Random.ctitle(5, 8) + '服务套餐',
     amount: Mock.Random.float(1000, 50000, 2, 2),
-    orderTime: +Mock.Random.date('T'),
+    orderTime: baseOrderTime, // 使用随机生成的时间戳
     visitorCount: Mock.Random.integer(1, 10),
     visitorNames: Array.from({length: Mock.Random.integer(1, 5)}, () => Mock.Random.cname()),
-    paymentTime: +Mock.Random.date('T'),
+    paymentTime: paymentTime,
     auditor: Mock.Random.cname(),
-    auditTime: +Mock.Random.date('T'),
-    modifyTime: +Mock.Random.date('T'),
+    auditTime: auditTime,
+    modifyTime: modifyTime,
     status: Mock.Random.pick(['已审核', '待审核', '已修改'])
   }))
 }
+
 
 module.exports = [
   {

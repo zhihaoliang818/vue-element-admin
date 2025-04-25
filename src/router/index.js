@@ -58,47 +58,61 @@ export const constantRoutes = [
    * 注意：这里对应侧边栏的「首页」父级菜单
    */
   {
-    path: '/order',
+    path: '/user-manage',
     component: Layout,
-    meta: {
-      title: '订单管理', // 修改此处将显示名称改为「订单管理」
-      icon: 'table' // 侧边栏图标（Element UI图标名称）
-    },
-    redirect: 'noRedirect', // 重定向到子路由
-    children: [
-      // 境内订单管理路由
-      {
-        path: 'domestic',
-        component: () => import('@/views/order/domestic'),
-        name: 'DomesticOrders',
-        meta: {
-          title: '境内订单管理',
-          icon: 'el-icon-s-order'
-        }
-      },
-
-      // 境外订单管理路由
-      {
-        path: 'international',
-        component: () => import('@/views/order/international'),
-        name: 'InternationalOrders',
-        meta: {
-          title: '境外订单管理',
-          icon: 'el-icon-s-promotion'
-        }
-      },
-
-      // 退改订单管理路由
-      {
-        path: 'amendments',
-        component: () => import('@/views/order/amendments'),
-        name: 'OrderAmendments',
-        meta: {
-          title: '退改订单管理',
-          icon: 'el-icon-refresh-left'
-        }
+    children: [{
+      path: '',
+      component: () => import('@/views/user-manager/index'),
+      name: 'DomesticOrders',
+      meta: {
+        title: '用户管理',
+        icon: 'el-icon-s-order'
       }
-    ]
+    }]
+  },
+  // 境内订单管理路由
+  {
+    path: '/domestic',
+    component: Layout,
+    children: [{
+      path: '',
+      component: () => import('@/views/order/domestic'),
+      name: 'DomesticOrders',
+      meta: {
+        title: '境内订单管理',
+        icon: 'el-icon-s-order'
+      }
+    }]
+  },
+
+  // 境外订单管理路由
+  {
+    path: '/international',
+    component: Layout,
+    children: [{
+      path: '',
+      component: () => import('@/views/order/international'),
+      name: 'InternationalOrders',
+      meta: {
+        title: '境外订单管理',
+        icon: 'el-icon-s-promotion'
+      }
+    }]
+  },
+
+  // 退改订单管理路由
+  {
+    path: '/amendments',
+    component: Layout,
+    children: [{
+      path: '',
+      component: () => import('@/views/order/amendments'),
+      name: 'OrderAmendments',
+      meta: {
+        title: '退改订单管理',
+        icon: 'el-icon-refresh-left'
+      }
+    }]
   }
 ]
 

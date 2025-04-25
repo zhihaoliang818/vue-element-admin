@@ -8,6 +8,8 @@ const search = require('./remote-search')
 const domestic = require('./domestic')
 const international = require('./international')
 const amendments = require('./amendments')
+const userManager = require('./user-manager')
+
 
 
 const mocks = [
@@ -17,7 +19,8 @@ const mocks = [
   ...search,
   ...domestic,
   ...international,
-  ...amendments
+  ...amendments,
+  ...userManager
 ]
 
 // for front mock
