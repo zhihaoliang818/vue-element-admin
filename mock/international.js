@@ -1,4 +1,5 @@
 const Mock = require('mockjs')
+const serviceData = require('./serviceData')
 const List = []
 const count = 100
 
@@ -11,6 +12,10 @@ const generateFutureDate = (baseTime, minDays, maxDays) => {
   const days = Mock.Random.integer(minDays, maxDays)
   return baseTime + days * 24 * 60 * 60 * 1000
 }
+// 添加随机选择函数
+function getRandomService() {
+  return serviceData[Math.floor(Math.random() * serviceData.length)];
+}
 
 
 for (let i = 0; i < count; i++) {
@@ -21,14 +26,15 @@ for (let i = 0; i < count; i++) {
   const auditTime = generateFutureDate(paymentTime, 1, 5)     // 审核时间至少+1天
   const modifyTime = generateFutureDate(auditTime, 0, 5)      // 修改时间允许当天
   
+  const service = getRandomService();
   List.push(Mock.mock({
     id: i + 1,
     orderNumber: Mock.Random.string('number', 12),
     customerNameEn: Mock.Random.first() + ' ' + Mock.Random.last(),
     country: Mock.Random.pick(['US', 'GB', 'JP', 'KR', 'FR']),
     gender: Mock.Random.pick(['男', '女']),
-    serviceName: Mock.Random.ctitle(5, 8) + '服务套餐',
-    amount: Mock.Random.float(1000, 50000, 2, 2),
+    serviceName: service.name,
+    amount: service.price,
     orderTime: baseOrderTime, // 使用随机生成的时间戳
     visitorCount: Mock.Random.integer(1, 10),
     visitorNames: Array.from({length: Mock.Random.integer(1, 5)}, () => Mock.Random.cname()),
