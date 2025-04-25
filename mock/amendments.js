@@ -1,28 +1,53 @@
 const Mock = require('mockjs')
+const serviceData = require('./serviceData') // 新增serviceData依赖
 
 const List = []
 const count = 100
 
+// 定义时间范围：2020-01-01 至当前
+const startDate = new Date('2020-01-01').getTime()
+const currentDate = Date.now()
+
+// 辅助函数：生成未来日期（含当前）
+const generateFutureDate = (baseTime, minDays, maxDays) => {
+  const days = Mock.Random.integer(minDays, maxDays)
+  return baseTime + days * 24 * 60 * 60 * 1000
+}
+
+// 新增服务随机选择函数
+function getRandomService() {
+  return serviceData[Math.floor(Math.random() * serviceData.length)]
+}
+
 for (let i = 0; i < count; i++) {
+  // 生成基础订单时间（2020-01-01至今）
+  const baseOrderTime = Mock.Random.integer(startDate, currentDate)
+
+  // 生成时间序列（确保时间顺序：订单时间 → 修改时间 → 审核时间）
+  const modifyTime = generateFutureDate(baseOrderTime, 1, 5) // 修改时间在订单时间后1-5天
+  const auditTime = generateFutureDate(modifyTime, 1, 5)      // 审核时间在修改时间后1-5天
+
+  const service = getRandomService()
+
   List.push(Mock.mock({
     id: i + 1,
     orderNumber: Mock.Random.string('number', 12),
     customerName: Mock.Random.cname(),
     amendOrderNo: 'TG' + Mock.Random.string('number', 8),
     originalOrderNo: 'YD' + Mock.Random.string('number', 8),
-    serviceName: Mock.Random.ctitle(5, 8) + '服务套餐',
-    amount: Mock.Random.float(1000, 50000, 2, 2),
-    orderTime: +Mock.Random.date('T'),
-    refundAmount: Mock.Random.float(500, 50000, 2, 2),
+    serviceName: service.name, // 替换为serviceData数据
+    amount: service.price, // 替换为serviceData数据
+    orderTime: baseOrderTime,
+    refundAmount: service.price,
     refundStatus: Mock.Random.pick(['待审核', '已通过', '已拒绝']),
-    auditTime: +Mock.Random.date('T'),
-    updateTime: +Mock.Random.date('T'),
     auditor: Mock.Random.cname(),
-    auditTime: +Mock.Random.date('T'),
-    modifyTime: +Mock.Random.date('T'),
-    status: Mock.Random.pick(['已处理', '待处理'])
+    updateTime: modifyTime, // 对应视图中的prop="updateTime"
+    auditTime: auditTime,   // 对应视图中的prop="auditTime"
+    status: Mock.Random.pick(['已处理', '待处理']),
+    lastUpdateTime: currentDate // 重命名避免字段冲突
   }))
 }
+
 
 module.exports = [
   {

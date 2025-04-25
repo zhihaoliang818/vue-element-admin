@@ -86,11 +86,6 @@
           <span>{{ row.customerName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="退款金额" prop="refundAmount" width="120px" align="center">
-        <template slot-scope="{row}">
-          <span>¥{{ row.refundAmount }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="退款状态" prop="refundStatus" width="100px" align="center">
         <template slot-scope="{row}">
           <el-tag :type="row.refundStatus === '已通过' ? 'success' : 'danger'">{{ row.refundStatus }}</el-tag>
