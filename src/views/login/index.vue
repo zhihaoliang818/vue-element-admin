@@ -1,11 +1,15 @@
+<!-- 登录页面主模板 -->
 <template>
   <div class="login-container">
+    <!-- 登录表单区域 -->
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
+      <!-- 系统标题 -->
       <div class="title-container">
         <h3 class="title">游艇旅游订单管理系统</h3>
       </div>
 
+      <!-- 用户名输入 -->
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
@@ -21,6 +25,7 @@
         />
       </el-form-item>
 
+      <!-- 密码输入（包含大写锁定提示） -->
       <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
         <el-form-item prop="password">
           <span class="svg-container">
@@ -72,6 +77,7 @@
       游艇旅游订单管理系统v1.0
     </div>
 
+    <!-- 第三方登录对话框 -->
     <el-dialog title="Or connect with" :visible.sync="showDialog">
       Can not be simulated on local, so please combine you own business simulation! ! !
       <br>
@@ -80,6 +86,7 @@
       <social-sign />
     </el-dialog>
 
+    <!-- 密码重置对话框 -->
     <el-dialog
       title="重置密码"
       :visible.sync="resetPasswordDialogVisible"
@@ -140,6 +147,7 @@
       </div>
     </el-dialog>
 
+    <!-- 用户注册对话框 -->
     <el-dialog
       title="用户注册"
       :visible.sync="registerDialogVisible"
@@ -212,6 +220,7 @@ export default {
   components: { SocialSign },
   data() {
     // --- Validation Functions ---
+    // --- 验证函数区域 ---
     const validateUsernameInput = (rule, value, callback) => {
       // Replace with your actual username validation logic if different from validUsername
       if (!value || value.trim().length === 0) {
@@ -276,6 +285,7 @@ export default {
       }
     }
     // --- End Validation Functions ---
+    // --- 验证函数区域结束 ---
 
     return {
       loginForm: {
@@ -326,7 +336,9 @@ export default {
       otherQuery: {}
     }
   },
+  // 组件状态监听
   watch: {
+    // 路由变化处理
     $route: {
       handler: function(route) {
         const query = route.query
@@ -337,7 +349,7 @@ export default {
       },
       immediate: true
     },
-    // Reset dialog visibility to clear form when opened (optional)
+    // 监听密码重置对话框状态
     resetPasswordDialogVisible(newValue) {
       if (newValue) {
         this.$nextTick(() => {
@@ -346,6 +358,7 @@ export default {
         })
       }
     },
+    // 监听注册对话框状态
     registerDialogVisible(newValue) {
       if (newValue) {
         this.$nextTick(() => {
@@ -355,11 +368,13 @@ export default {
       }
     }
   },
+  // 组件生命周期钩子
   created() {
+    // 二维码扫描事件监听（当前注释）
     // window.addEventListener('storage', this.afterQRScan)
   },
   mounted() {
-    // Focus logic remains the same
+    // 自动聚焦逻辑
     if (this.loginForm.username === '') {
       this.$refs.username.focus()
     } else if (this.loginForm.password === '') {
@@ -367,24 +382,29 @@ export default {
     }
   },
   destroyed() {
+    // 组件销毁时移除事件监听
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    // 检查大写锁定状态
     checkCapslock(e) {
       const { key } = e
       this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
     },
+    // 切换密码显示/隐藏
     showPwd() {
       this.passwordType = this.passwordType === 'password' ? '' : 'password'
       this.$nextTick(() => {
         this.$refs.password.focus()
       })
     },
+    // 处理登录提交
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
           // --- Replace with your actual login API call ---
+          // --- 替换为实际的登录API调用 ---
           console.log('Attempting login with:', this.loginForm)
           // Mock API call
           setTimeout(() => {
@@ -413,6 +433,7 @@ export default {
             }
           }, 1000) // Simulate network delay
           // --- End of mock/actual API call ---
+          // --- 模拟/实际API调用结束 ---
         } else {
           console.log('Login form validation failed!')
           return false
@@ -421,11 +442,13 @@ export default {
     },
 
     // Method to handle Reset Password submission
+    // 处理重置密码提交
     handleResetPassword() {
       this.$refs.resetForm.validate(valid => {
         if (valid) {
           console.log('Reset Password Form Data:', this.resetForm)
           // --- Frontend Only Logic ---
+          // --- 仅前端逻辑 ---
           // Here you would typically call an API to send a reset link/code
           // For now, just show a success message
           this.$message.success('密码重置请求已模拟提交 (前端)，请检查控制台输出')
@@ -433,6 +456,7 @@ export default {
           // e.g., axios.post('/api/password/reset-request', this.resetForm)...
           this.resetPasswordDialogVisible = false // Close dialog on success
           // --- End Frontend Only Logic ---
+          // --- 仅前端逻辑结束 ---
         } else {
           console.log('Reset password form validation failed!')
           this.$message.error('请检查输入项是否正确')
@@ -442,6 +466,7 @@ export default {
     },
 
     // Method to handle Registration submission
+    // 处理注册提交
     handleRegister() {
       this.$refs.registerForm.validate(valid => {
         if (valid) {
@@ -463,6 +488,8 @@ export default {
     },
 
     // Utility method from original code
+    // 从原始代码继承的工具方法
+    // 从原始代码继承的工具方法
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
         if (cur !== 'redirect') {
@@ -472,12 +499,15 @@ export default {
       }, {})
     }
     // afterQRScan() { ... } // Keep if needed
+    // 二维码扫描后的处理（保留如果需要）
   }
 }
 </script>
 
+<!-- 全局样式 -->
 <style lang="scss">
 /* Shared styles for dialogs (can be unscoped or scoped if preferred) */
+/* 对话框的共享样式（可以是全局或局部作用域） */
 .custom-dialog {
   .dialog-header-icon {
       text-align: center;
@@ -540,6 +570,7 @@ $cursor: #fff;
 }
 
 /* Reset element-ui css for login form */
+/* 重置element-ui的登录表单样式 */
 .login-container {
   .el-input {
     display: inline-block;
@@ -572,8 +603,10 @@ $cursor: #fff;
 }
 </style>
 
+<!-- 组件私有样式 -->
 <style lang="scss" scoped>
 // Original scoped styles (keep most, adjust where needed)
+// 原始作用域样式（保留大部分，按需调整）
 .version-info {
   position: fixed; // Keep it fixed at the bottom
   bottom: 20px;
