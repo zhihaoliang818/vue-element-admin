@@ -57,21 +57,6 @@ export const constantRoutes = [
    * 根路由 - 首页
    * 注意：这里对应侧边栏的「首页」父级菜单
    */
-  // 未开放
-  // {
-  //   path: '/log',
-  //   component: Layout,
-  //   redirect: '/user',
-  //   meta: { title: '用户管理', icon: 'el-icon-notebook-2' },
-  //   children: [
-  //     {
-  //       path: 'list',
-  //       component: () => import('@/views/user-manger'),
-  //       name: 'LogList',
-  //       meta: { title: '用户管理', icon: 'el-icon-tickets' }
-  //     }
-  //   ]
-  // },
   {
     path: '/order',
     component: Layout,
