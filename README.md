@@ -4,7 +4,7 @@
 [![Element UI](https://img.shields.io/badge/Element--UI-2.15.6-blue.svg)](https://element.eleme.io/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-> 基于 [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin) 二次开发，专为游艇旅游业务打造的高效订单管理平台。
+> 专为游艇旅游业务打造的高效订单管理平台。
 
 ---
 
@@ -104,7 +104,7 @@ npm run lint -- --fix
 ---
 
 ## 致谢
-
+基于 [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin) 二次开发
 感谢 [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin) 及所有开源贡献者！
 
 ---
