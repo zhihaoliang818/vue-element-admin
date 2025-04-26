@@ -66,7 +66,7 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80">
+      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
@@ -246,7 +246,7 @@ export default {
         limit: 7,
         searchKey: undefined, // 搜索字段：orderNumber/customerName/serviceName
         searchValue: undefined, // 搜索内容
-        sort: '+id'
+        sort: '-id'
       },
       countryOptions: [
         { code: 'US', name: '美国' },
@@ -312,6 +312,10 @@ export default {
     sortByID(order) {
       this.listQuery.sort = order === 'ascending' ? '+id' : '-id'
       this.handleFilter()
+    },
+    getSortClass(key) {
+      const sort = this.listQuery.sort
+      return sort === `+${key}` ? 'ascending' : (sort === `-${key}` ? 'descending' : '')
     },
     resetTemp() {
       this.temp = {

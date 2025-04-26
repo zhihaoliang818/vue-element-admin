@@ -197,7 +197,7 @@ export default {
         account: undefined,
         name: undefined,
         email: undefined,
-        sort: '+id'
+        sort: '-id' // 默认从大到小排序
       },
       // User data model for the form
       tempUser: {

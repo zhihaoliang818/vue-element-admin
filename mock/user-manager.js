@@ -12,7 +12,7 @@ for (let i = 0; i < count; i++) {
   const updatedAt = Mock.Random.integer(createdAt, currentDate) // Ensure updatedAt is after or same as createdAt
 
   List.push(Mock.mock({
-    id: i + 1,
+    id: count - i,
     account: Mock.Random.word(6, 12), // Random word for account name
     // Mock.js doesn't have a specific password generator, using string
     password_hash: Mock.Random.string('lower', 32), // Simulate a hashed password (don't store plain text!)
@@ -42,12 +42,12 @@ module.exports = [
       })
 
       // Sorting logic
-      if (sort === '-id') {
-        mockList = mockList.reverse()
-      } else if (sort === '+id') {
-        // Default order is ascending by ID if not reversed
-        mockList = mockList.sort((a, b) => a.id - b.id)
-      }
+      mockList = [...mockList].sort((a, b) => {
+        if (sort === '-id') {
+          return b.id - a.id
+        }
+        return a.id - b.id
+      })
 
       // Pagination logic
       const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))

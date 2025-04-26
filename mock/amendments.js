@@ -30,7 +30,7 @@ for (let i = 0; i < count; i++) {
   const service = getRandomService()
 
   List.push(Mock.mock({
-    id: i + 1,
+    id: count - i,
     orderNumber: Mock.Random.string('number', 12),
     customerName: Mock.Random.cname(),
     amendOrderNo: 'TG' + Mock.Random.string('number', 8),
@@ -63,9 +63,13 @@ module.exports = [
         return true
       })
 
-      if (sort === '-id') {
-        mockList = mockList.reverse()
-      }
+            // 排序逻辑
+      mockList = [...mockList].sort((a, b) => {
+        if (sort === '-id') {
+          return b.id - a.id
+        }
+        return a.id - b.id
+      })
 
       const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
 
