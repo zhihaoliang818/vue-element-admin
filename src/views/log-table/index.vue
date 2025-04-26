@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="log in logs" :key="log.id">
+        <tr v-for="log in paginatedLogs" :key="log.id">
           <td>{{ log.id }}</td>
           <td>{{ log.account }}</td>
           <td>{{ log.operator }}</td>
@@ -26,13 +26,14 @@
     </table>
     <!-- 分页组件 -->
     <div class="pagination-container">
+      <div class="pagination-info">Total {{ logs.length }}</div>
+      <div class="pagination-info">7/page</div>
       <el-pagination
         :current-page="currentPage"
-        :page-sizes="[5, 10, 20, 50]"
         :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="prev, pager, next, jumper"
         :total="logs.length"
-        @size-change="handleSizeChange"
+        :pager-count="5"
         @current-change="handleCurrentChange"
       />
     </div>
@@ -45,17 +46,17 @@ export default {
   data() {
     return {
       logs: [
-        { id: 1, account: 'admin', operator: 'admin', action: '登录', time: '2024-02-11 12:02:10' },
-        { id: 2, account: 'xiaomi', operator: '王小米', action: '登录', time: '2024-02-09 12:01:31' },
-        { id: 3, account: 'xiaomi', operator: '王小米', action: '登录', time: '2024-02-08 19:25:34' },
-        { id: 4, account: 'liudashuai', operator: '刘大帅', action: '登录', time: '2024-02-08 19:20:30' },
-        { id: 5, account: 'liudashuai', operator: '刘大帅', action: '登录', time: '2024-02-07 18:50:30' },
-        { id: 6, account: 'wangting', operator: '王婷', action: '登录', time: '2024-02-06 19:31:06' },
-        { id: 7, account: 'wangting', operator: '王婷', action: '登录', time: '2024-02-05 12:38:16' },
-        { id: 8, account: 'zhaolong', operator: '赵龙', action: '登录', time: '2024-02-03 19:30:56' }
+        { id: 8, account: 'admin', operator: 'admin', action: '登录', time: '2024-02-11 12:02:10' },
+        { id: 7, account: 'xiaomi', operator: '王小米', action: '新增境内订单', time: '2024-02-09 12:01:31' },
+        { id: 6, account: 'xiaomi', operator: '王小米', action: '新增境外订单', time: '2024-02-08 19:25:34' },
+        { id: 5, account: 'liudashuai', operator: '刘大帅', action: '新增境内订单', time: '2024-02-08 19:20:30' },
+        { id: 4, account: 'liudashuai', operator: '刘大帅', action: '新增境内订单', time: '2024-02-07 18:50:30' },
+        { id: 3, account: 'wangting', operator: '王婷', action: '同意退改订单', time: '2024-02-06 19:31:06' },
+        { id: 2, account: 'wangting', operator: '王婷', action: '登录', time: '2024-02-05 12:38:16' },
+        { id: 1, account: 'zhaolong', operator: '赵龙', action: '同意退改订单', time: '2024-02-03 19:30:56' }
       ],
       currentPage: 1, // 当前页码
-      pageSize: 5 // 每页显示条数
+      pageSize: 7 // 每页显示条数
     }
   },
   computed: {
@@ -79,12 +80,19 @@ export default {
           type: 'success',
           message: '删除成功!'
         })
+        // 如果删除后当前页没有数据且不是第一页，则返回上一页
+        if (this.paginatedLogs.length === 0 && this.currentPage > 1) {
+          this.currentPage -= 1
+        }
       }).catch(() => {
         this.$message({
           type: 'info',
           message: '已取消删除'
         })
       })
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
     }
   }
 }
@@ -128,6 +136,37 @@ export default {
 
 .delete-btn:hover {
   background-color: #d32f2f;
+}
+
+/* 新增分页样式 */
+.pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #606266;
+}
+
+/* 调整分页组件样式 */
+.el-pagination {
+  padding: 0;
+}
+
+.el-pagination .btn-prev,
+.el-pagination .btn-next {
+  padding: 0 6px;
+}
+
+.el-pagination .el-pager li {
+  padding: 0 6px;
+  min-width: 28px;
+  height: 28px;
+  line-height: 28px;
 }
 
 </style>
