@@ -75,8 +75,9 @@ module.exports = [
            message: 'Required fields are missing.'
          }
       }
+      const maxId = Math.max(...List.map(user => user.id), 0);
       const newUser = {
-        id: Mock.Random.integer(1000, 9999), // Generate a random ID for mock
+        id: maxId + 1, // Generate incremental ID based on max existing ID
         account: account,
         password_hash: Mock.Random.string('lower', 32), // Simulate hashing
         email: email,
